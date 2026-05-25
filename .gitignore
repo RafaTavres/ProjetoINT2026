@@ -1,0 +1,43 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# .NET
+*.nupkg
+*.snupkg
+project.lock.json
+project.assets.json
+artifacts/
+TestResults/
+coverage/
+
+# MAUI / mobile build artifacts
+*.apk
+*.aab
+*.ipa
+*.appx
+*.msix
+*.msixbundle
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local environment
+.env
+.env.*
+!.env.example
