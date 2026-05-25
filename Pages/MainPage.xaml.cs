@@ -1,4 +1,4 @@
-namespace ProjetoINT2026;
+namespace ProjetoINT2026.Pages;
 
 public partial class MainPage : ContentPage
 {

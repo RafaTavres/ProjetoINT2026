@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ProjetoINT2026.Controls"
+             x:Class="ProjetoINT2026.Pages.ChatPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#FFFFFF">
+
+    <ContentPage.Resources>
+        <Color x:Key="Sage">#B2BFA2</Color>
+        <Color x:Key="SageSoft">#C8D0BE</Color>
+        <Color x:Key="OliveText">#777F69</Color>
+        <Color x:Key="SoftText">#8B9287</Color>
+        <Color x:Key="CardFill">#FAFAF9</Color>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*,86">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="36,48,28,24"
+                                 Spacing="24">
+                <HorizontalStackLayout Spacing="8">
+                    <Label Text="Ola,"
+                           TextColor="{StaticResource OliveText}"
+                           FontSize="26"
+                           FontAttributes="Bold"
+                           FontFamily="OpenSansSemibold" />
+                    <Label Text="Florence"
+                           TextColor="{StaticResource SageSoft}"
+                           FontSize="26"
+                           FontAttributes="Bold"
+                           FontFamily="OpenSansSemibold" />
+                </HorizontalStackLayout>
+
+                <Label Text="Como posso te ajudar com o plantao hoje?"
+                       TextColor="#3F463E"
+                       FontSize="13"
+                       Margin="0,-14,0,10" />
+
+                <Border BackgroundColor="#FBFBFA"
+                        Stroke="#E5E8E1"
+                        StrokeThickness="1"
+                        HeightRequest="52"
+                        Padding="18,0"
+                        HorizontalOptions="Fill">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="26" />
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="*,28"
+                          ColumnSpacing="8">
+                        <Label Text="Pergunte sobre um procedimento"
+                               TextColor="{StaticResource SoftText}"
+                               FontSize="14"
+                               VerticalOptions="Center" />
+                        <Image Grid.Column="1"
+                               Source="icon_search.svg"
+                               HeightRequest="20"
+                               WidthRequest="20"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <Grid ColumnDefinitions="*,*"
+                      RowDefinitions="92,92"
+                      ColumnSpacing="12"
+                      RowSpacing="12">
+                    <Border BackgroundColor="{StaticResource CardFill}"
+                            Stroke="#EEF0EC"
+                            StrokeThickness="1"
+                            Padding="16,13">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Sondagem Vesical"
+                                   TextColor="{StaticResource OliveText}"
+                                   FontSize="12"
+                                   FontAttributes="Bold" />
+                            <Label Text="Protocolos de alivio a demora..."
+                                   TextColor="#4F584C"
+                                   FontSize="12"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1"
+                            BackgroundColor="{StaticResource CardFill}"
+                            Stroke="#EEF0EC"
+                            StrokeThickness="1"
+                            Padding="16,13">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Calculo de Dose"
+                                   TextColor="{StaticResource OliveText}"
+                                   FontSize="12"
+                                   FontAttributes="Bold" />
+                            <Label Text="Gotejamento e microgotas..."
+                                   TextColor="#4F584C"
+                                   FontSize="12"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="1"
+                            BackgroundColor="{StaticResource CardFill}"
+                            Stroke="#EEF0EC"
+                            StrokeThickness="1"
+                            Padding="16,13">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Sinais Vitais"
+                                   TextColor="{StaticResource OliveText}"
+                                   FontSize="12"
+                                   FontAttributes="Bold" />
+                            <Label Text="Valores de referencia por idade..."
+                                   TextColor="#4F584C"
+                                   FontSize="12"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="1"
+                            Grid.Column="1"
+                            BackgroundColor="{StaticResource CardFill}"
+                            Stroke="#EEF0EC"
+                            StrokeThickness="1"
+                            Padding="16,13">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Curativos"
+                                   TextColor="{StaticResource OliveText}"
+                                   FontSize="12"
+                                   FontAttributes="Bold" />
+                            <Label Text="Tipos de cobertura para LPP..."
+                                   TextColor="#4F584C"
+                                   FontSize="12"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <controls:BottomNavigationBar Grid.Row="1"
+                                      ActiveTab="Chat" />
+    </Grid>
+</ContentPage>

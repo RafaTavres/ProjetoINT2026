@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ProjetoINT2026.Controls"
+             xmlns:pages="clr-namespace:ProjetoINT2026.Pages"
+             x:Class="ProjetoINT2026.Pages.NotesPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#FAFBF8">
+
+    <ContentPage.Resources>
+        <Color x:Key="Sage">#AFC0A3</Color>
+        <Color x:Key="SageDark">#718066</Color>
+        <Color x:Key="OliveText">#66745C</Color>
+        <Color x:Key="BodyText">#343A32</Color>
+        <Color x:Key="PanelFill">#F1F2EF</Color>
+        <Color x:Key="Line">#E0E3DC</Color>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*,86">
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*,118"
+              RowDefinitions="72,*"
+              Padding="18,22,18,0">
+            <Grid Grid.ColumnSpan="2"
+                  ColumnDefinitions="*,44,44,44"
+                  ColumnSpacing="8"
+                  Padding="0,0,0,10">
+                <VerticalStackLayout Spacing="0"
+                                     VerticalOptions="Center">
+                    <Label Text="Minhas Notas"
+                           TextColor="{StaticResource OliveText}"
+                           FontSize="26"
+                           FontAttributes="Bold"
+                           FontFamily="OpenSansSemibold" />
+                    <Label x:Name="StatusLabel"
+                           Text="Editando Anatomia 01"
+                           TextColor="#8A9284"
+                           FontSize="12" />
+                </VerticalStackLayout>
+
+                <Border Grid.Column="1"
+                        BackgroundColor="{StaticResource Sage}"
+                        StrokeThickness="0"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAddNoteTapped" />
+                    </Border.GestureRecognizers>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <Image Source="icon_add_note.svg"
+                           HeightRequest="23"
+                           WidthRequest="23"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <Border Grid.Column="2"
+                        BackgroundColor="#FFFFFF"
+                        Stroke="{StaticResource Line}"
+                        StrokeThickness="1"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnShareNoteTapped" />
+                    </Border.GestureRecognizers>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <Image Source="icon_share.svg"
+                           HeightRequest="22"
+                           WidthRequest="22"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <Border Grid.Column="3"
+                        BackgroundColor="#FFFFFF"
+                        Stroke="{StaticResource Line}"
+                        StrokeThickness="1"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDeleteNoteTapped" />
+                    </Border.GestureRecognizers>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <Image Source="icon_trash.svg"
+                           HeightRequest="22"
+                           WidthRequest="22"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+            </Grid>
+
+            <Border Grid.Row="1"
+                    BackgroundColor="#FFFFFF"
+                    Stroke="{StaticResource Line}"
+                    StrokeThickness="1"
+                    Padding="16,14">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="0" />
+                </Border.StrokeShape>
+                <Grid RowDefinitions="48,*">
+                    <Entry x:Name="TitleEntry"
+                           TextChanged="OnTitleChanged"
+                           TextColor="{StaticResource SageDark}"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           Placeholder="nova_nota.md"
+                           PlaceholderColor="#A6ADA0"
+                           BackgroundColor="Transparent" />
+
+                    <Editor x:Name="NoteEditor"
+                            Grid.Row="1"
+                            TextChanged="OnContentChanged"
+                            TextColor="{StaticResource BodyText}"
+                            FontSize="15"
+                            AutoSize="TextChanges"
+                            Placeholder="# Titulo&#10;&#10;Escreva sua nota em markdown..."
+                            PlaceholderColor="#A0A79B"
+                            BackgroundColor="Transparent" />
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1"
+                    Grid.Column="1"
+                    BackgroundColor="{StaticResource PanelFill}"
+                    Stroke="{StaticResource Line}"
+                    StrokeThickness="1"
+                    Padding="10,12">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="0" />
+                </Border.StrokeShape>
+                <Grid RowDefinitions="28,*">
+                    <Label Text="NOTAS"
+                           TextColor="{StaticResource BodyText}"
+                           FontSize="11"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center" />
+
+                    <CollectionView x:Name="NotesCollection"
+                                    Grid.Row="1"
+                                    SelectionMode="Single"
+                                    SelectionChanged="OnNoteSelectionChanged">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical"
+                                               ItemSpacing="9" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="pages:NoteItem">
+                                <Border BackgroundColor="#FFFFFF"
+                                        Stroke="#E7E9E4"
+                                        StrokeThickness="1"
+                                        Padding="8,7"
+                                        MinimumHeightRequest="36">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="4" />
+                                    </Border.StrokeShape>
+                                    <Label Text="{Binding Title}"
+                                           TextColor="{StaticResource BodyText}"
+                                           FontSize="11"
+                                           LineBreakMode="TailTruncation" />
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <controls:BottomNavigationBar Grid.Row="1"
+                                      ActiveTab="Notes" />
+    </Grid>
+</ContentPage>

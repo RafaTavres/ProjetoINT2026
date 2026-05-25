@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ProjetoINT2026.Controls"
+             x:Class="ProjetoINT2026.Pages.PatientsPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#FCFCFA">
+
+    <ContentPage.Resources>
+        <Color x:Key="Sage">#8FAA87</Color>
+        <Color x:Key="SageSoft">#DDE7DA</Color>
+        <Color x:Key="SagePale">#EEF4EC</Color>
+        <Color x:Key="OliveText">#536B50</Color>
+        <Color x:Key="BodyText">#20251F</Color>
+        <Color x:Key="SoftText">#777D75</Color>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*,86">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="28,44,28,24"
+                                 Spacing="22">
+                <Grid ColumnDefinitions="*,56">
+                    <Label Text="Pacientes"
+                           TextColor="{StaticResource OliveText}"
+                           FontSize="36"
+                           FontAttributes="Bold"
+                           FontFamily="OpenSansSemibold"
+                           VerticalOptions="Center" />
+
+                    <Border Grid.Column="1"
+                            BackgroundColor="{StaticResource Sage}"
+                            StrokeThickness="0"
+                            HeightRequest="52"
+                            WidthRequest="52"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="26" />
+                        </Border.StrokeShape>
+                        <Label Text="+"
+                               TextColor="White"
+                               FontSize="38"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               Margin="0,-4,0,0" />
+                    </Border>
+                </Grid>
+
+                <Border BackgroundColor="#FFFFFF"
+                        Stroke="#E1E5DD"
+                        StrokeThickness="1"
+                        HeightRequest="54"
+                        Padding="16,0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="18" />
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="28,*"
+                          ColumnSpacing="8">
+                        <Image Source="icon_search.svg"
+                               HeightRequest="22"
+                               WidthRequest="22"
+                               VerticalOptions="Center" />
+                        <Entry Grid.Column="1"
+                               Placeholder="Buscar paciente..."
+                               PlaceholderColor="{StaticResource SoftText}"
+                               TextColor="{StaticResource BodyText}"
+                               FontSize="16"
+                               BackgroundColor="Transparent"
+                               ClearButtonVisibility="WhileEditing"
+                               VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <VerticalStackLayout Spacing="14"
+                                     Margin="0,4,0,0">
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#E5E8E1"
+                            StrokeThickness="1"
+                            HeightRequest="106"
+                            Padding="16,0">
+                        <Border.Shadow>
+                            <Shadow Brush="#24000000"
+                                    Offset="0,7"
+                                    Radius="16"
+                                    Opacity="0.18" />
+                        </Border.Shadow>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="72,*,24,22"
+                              ColumnSpacing="14"
+                              VerticalOptions="Center">
+                            <Grid HeightRequest="64"
+                                  WidthRequest="64"
+                                  VerticalOptions="Center">
+                                <Ellipse Fill="{StaticResource SagePale}" />
+                                <Ellipse Fill="{StaticResource Sage}"
+                                         HeightRequest="25"
+                                         WidthRequest="25"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Start"
+                                         Margin="0,11,0,0" />
+                                <Ellipse Fill="{StaticResource Sage}"
+                                         HeightRequest="38"
+                                         WidthRequest="48"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="End"
+                                         Margin="0,0,0,7" />
+                            </Grid>
+                            <Label Grid.Column="1"
+                                   Text="Carlos Silva"
+                                   TextColor="{StaticResource BodyText}"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+                            <Border Grid.Column="2"
+                                    BackgroundColor="{StaticResource SageSoft}"
+                                    StrokeThickness="0"
+                                    HeightRequest="18"
+                                    WidthRequest="20"
+                                    VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="7" />
+                                </Border.StrokeShape>
+                            </Border>
+                            <Label Grid.Column="3"
+                                   Text=">"
+                                   TextColor="#6E746D"
+                                   FontSize="38"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="End"
+                                   Margin="0,-4,0,0" />
+                        </Grid>
+                    </Border>
+
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#E5E8E1"
+                            StrokeThickness="1"
+                            HeightRequest="106"
+                            Padding="16,0">
+                        <Border.Shadow>
+                            <Shadow Brush="#24000000"
+                                    Offset="0,7"
+                                    Radius="16"
+                                    Opacity="0.18" />
+                        </Border.Shadow>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="72,*,24,22"
+                              ColumnSpacing="14"
+                              VerticalOptions="Center">
+                            <Grid HeightRequest="64"
+                                  WidthRequest="64"
+                                  VerticalOptions="Center">
+                                <Ellipse Fill="{StaticResource SagePale}" />
+                                <Ellipse Fill="{StaticResource Sage}"
+                                         HeightRequest="25"
+                                         WidthRequest="25"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Start"
+                                         Margin="0,11,0,0" />
+                                <Ellipse Fill="{StaticResource Sage}"
+                                         HeightRequest="38"
+                                         WidthRequest="48"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="End"
+                                         Margin="0,0,0,7" />
+                            </Grid>
+                            <Label Grid.Column="1"
+                                   Text="Mateus Oliveira"
+                                   TextColor="{StaticResource BodyText}"
+                                   FontSize="21"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+                            <Border Grid.Column="2"
+                                    BackgroundColor="{StaticResource SageSoft}"
+                                    StrokeThickness="0"
+                                    HeightRequest="18"
+                                    WidthRequest="20"
+                                    VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="7" />
+                                </Border.StrokeShape>
+                            </Border>
+                            <Label Grid.Column="3"
+                                   Text=">"
+                                   TextColor="#6E746D"
+                                   FontSize="38"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="End"
+                                   Margin="0,-4,0,0" />
+                        </Grid>
+                    </Border>
+
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#E5E8E1"
+                            StrokeThickness="1"
+                            HeightRequest="106"
+                            Padding="16,0">
+                        <Border.Shadow>
+                            <Shadow Brush="#24000000"
+                                    Offset="0,7"
+                                    Radius="16"
+                                    Opacity="0.18" />
+                        </Border.Shadow>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="72,*,24,22"
+                              ColumnSpacing="14"
+                              VerticalOptions="Center">
+                            <Grid HeightRequest="64"
+                                  WidthRequest="64"
+                                  VerticalOptions="Center">
+                                <Ellipse Fill="{StaticResource SagePale}" />
+                                <Ellipse Fill="{StaticResource Sage}"
+                                         HeightRequest="25"
+                                         WidthRequest="25"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Start"
+                                         Margin="0,11,0,0" />
+                                <Ellipse Fill="{StaticResource Sage}"
+                                         HeightRequest="38"
+                                         WidthRequest="48"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="End"
+                                         Margin="0,0,0,7" />
+                            </Grid>
+                            <Label Grid.Column="1"
+                                   Text="Ana Beatriz"
+                                   TextColor="{StaticResource BodyText}"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+                            <Border Grid.Column="2"
+                                    BackgroundColor="{StaticResource SageSoft}"
+                                    StrokeThickness="0"
+                                    HeightRequest="18"
+                                    WidthRequest="20"
+                                    VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="7" />
+                                </Border.StrokeShape>
+                            </Border>
+                            <Label Grid.Column="3"
+                                   Text=">"
+                                   TextColor="#6E746D"
+                                   FontSize="38"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="End"
+                                   Margin="0,-4,0,0" />
+                        </Grid>
+                    </Border>
+
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#E5E8E1"
+                            StrokeThickness="1"
+                            HeightRequest="106"
+                            Padding="16,0">
+                        <Border.Shadow>
+                            <Shadow Brush="#24000000"
+                                    Offset="0,7"
+                                    Radius="16"
+                                    Opacity="0.18" />
+                        </Border.Shadow>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="72,*,24,22"
+                              ColumnSpacing="14"
+                              VerticalOptions="Center">
+                            <Grid HeightRequest="64"
+                                  WidthRequest="64"
+                                  VerticalOptions="Center">
+                                <Ellipse Fill="{StaticResource SagePale}" />
+                                <Ellipse Fill="{StaticResource Sage}"
+                                         HeightRequest="25"
+                                         WidthRequest="25"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Start"
+                                         Margin="0,11,0,0" />
+                                <Ellipse Fill="{StaticResource Sage}"
+                                         HeightRequest="38"
+                                         WidthRequest="48"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="End"
+                                         Margin="0,0,0,7" />
+                            </Grid>
+                            <Label Grid.Column="1"
+                                   Text="Julia Costa"
+                                   TextColor="{StaticResource BodyText}"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+                            <Border Grid.Column="2"
+                                    BackgroundColor="{StaticResource SageSoft}"
+                                    StrokeThickness="0"
+                                    HeightRequest="18"
+                                    WidthRequest="20"
+                                    VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="7" />
+                                </Border.StrokeShape>
+                            </Border>
+                            <Label Grid.Column="3"
+                                   Text=">"
+                                   TextColor="#6E746D"
+                                   FontSize="38"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="End"
+                                   Margin="0,-4,0,0" />
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <controls:BottomNavigationBar Grid.Row="1"
+                                      ActiveTab="Patients" />
+    </Grid>
+</ContentPage>
