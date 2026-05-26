@@ -2,152 +2,251 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ProjetoINT2026.Controls"
+             xmlns:pages="clr-namespace:ProjetoINT2026.Pages"
              x:Class="ProjetoINT2026.Pages.ChatPage"
+             x:DataType="pages:ChatPage"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="#FFFFFF">
+             BackgroundColor="#FAFBF8">
 
     <ContentPage.Resources>
-        <Color x:Key="Sage">#B2BFA2</Color>
-        <Color x:Key="SageSoft">#C8D0BE</Color>
-        <Color x:Key="OliveText">#777F69</Color>
-        <Color x:Key="SoftText">#8B9287</Color>
-        <Color x:Key="CardFill">#FAFAF9</Color>
+        <Color x:Key="Sage">#AFC0A3</Color>
+        <Color x:Key="SageDark">#66745C</Color>
+        <Color x:Key="BodyText">#343A32</Color>
+        <Color x:Key="SoftText">#7E877A</Color>
+        <Color x:Key="Line">#E4E7E0</Color>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="*,86">
-        <ScrollView Grid.Row="0">
-            <VerticalStackLayout Padding="36,48,28,24"
-                                 Spacing="24">
-                <HorizontalStackLayout Spacing="8">
-                    <Label Text="Ola,"
-                           TextColor="{StaticResource OliveText}"
-                           FontSize="26"
+    <Grid>
+        <Grid RowDefinitions="*,86">
+            <Grid Grid.Row="0"
+                  RowDefinitions="88,*,76"
+                  Padding="24,34,24,0">
+            <VerticalStackLayout Spacing="2"
+                                 VerticalOptions="Center">
+                <HorizontalStackLayout Spacing="7">
+                    <Label Text="Chat"
+                           TextColor="{StaticResource SageDark}"
+                           FontSize="30"
                            FontAttributes="Bold"
                            FontFamily="OpenSansSemibold" />
-                    <Label Text="Florence"
-                           TextColor="{StaticResource SageSoft}"
-                           FontSize="26"
+                    <Label Text="IA"
+                           TextColor="{StaticResource Sage}"
+                           FontSize="30"
                            FontAttributes="Bold"
                            FontFamily="OpenSansSemibold" />
                 </HorizontalStackLayout>
+                <Label Text="Assistente local para treinar fluxos de conversa"
+                       TextColor="{StaticResource SoftText}"
+                       FontSize="13" />
+            </VerticalStackLayout>
 
-                <Label Text="Como posso te ajudar com o plantao hoje?"
-                       TextColor="#3F463E"
-                       FontSize="13"
-                       Margin="0,-14,0,10" />
+            <CollectionView x:Name="MessagesCollection"
+                            Grid.Row="1"
+                            ItemsSource="{Binding Messages}"
+                            SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                                       ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="pages:ChatMessage">
+                        <Grid ColumnDefinitions="*,*">
+                            <Border Grid.Column="{Binding Column}"
+                                    BackgroundColor="{Binding BubbleColor}"
+                                    Stroke="{StaticResource Line}"
+                                    StrokeThickness="1"
+                                    Padding="14,10"
+                                    MaximumWidthRequest="260">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnMessageTapped" />
+                                </Border.GestureRecognizers>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="{Binding Sender}"
+                                           TextColor="{Binding SenderColor}"
+                                           FontSize="11"
+                                           FontAttributes="Bold" />
+                                    <Label Text="{Binding Text}"
+                                           TextColor="{Binding TextColor}"
+                                           FontSize="14"
+                                           LineBreakMode="WordWrap" />
+                                    <Border IsVisible="{Binding ShowSaveAsNote}"
+                                            BackgroundColor="#EEF4EC"
+                                            Stroke="#DCE6D8"
+                                            StrokeThickness="1"
+                                            HeightRequest="28"
+                                            Padding="10,0"
+                                            HorizontalOptions="End"
+                                            Margin="0,6,0,0">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSaveAsNoteTapped" />
+                                        </Border.GestureRecognizers>
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="14" />
+                                        </Border.StrokeShape>
+                                        <HorizontalStackLayout Spacing="5"
+                                                               VerticalOptions="Center">
+                                            <Image Source="icon_add_note.svg"
+                                                   HeightRequest="14"
+                                                   WidthRequest="14"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="Nota"
+                                                   TextColor="{StaticResource SageDark}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-                <Border BackgroundColor="#FBFBFA"
-                        Stroke="#E5E8E1"
+            <Grid Grid.Row="2"
+                  ColumnDefinitions="*,54"
+                  ColumnSpacing="10"
+                  Padding="0,12,0,10">
+                <Border BackgroundColor="#FFFFFF"
+                        Stroke="{StaticResource Line}"
                         StrokeThickness="1"
-                        HeightRequest="52"
-                        Padding="18,0"
-                        HorizontalOptions="Fill">
+                        Padding="16,0">
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="26" />
+                        <RoundRectangle CornerRadius="24" />
                     </Border.StrokeShape>
-                    <Grid ColumnDefinitions="*,28"
-                          ColumnSpacing="8">
-                        <Label Text="Pergunte sobre um procedimento"
-                               TextColor="{StaticResource SoftText}"
-                               FontSize="14"
-                               VerticalOptions="Center" />
-                        <Image Grid.Column="1"
-                               Source="icon_search.svg"
-                               HeightRequest="20"
-                               WidthRequest="20"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center" />
-                    </Grid>
+                    <Entry x:Name="MessageEntry"
+                           Placeholder="Digite sua mensagem..."
+                           PlaceholderColor="{StaticResource SoftText}"
+                           TextColor="{StaticResource BodyText}"
+                           FontSize="14"
+                           BackgroundColor="Transparent"
+                           ReturnType="Send"
+                           Completed="OnMessageCompleted"
+                           VerticalOptions="Center" />
                 </Border>
 
-                <Grid ColumnDefinitions="*,*"
-                      RowDefinitions="92,92"
-                      ColumnSpacing="12"
-                      RowSpacing="12">
-                    <Border BackgroundColor="{StaticResource CardFill}"
-                            Stroke="#EEF0EC"
+                <Button Grid.Column="1"
+                        Text="Enviar"
+                        Clicked="OnSendClicked"
+                        BackgroundColor="{StaticResource Sage}"
+                        TextColor="White"
+                        FontSize="12"
+                        FontAttributes="Bold"
+                        CornerRadius="24"
+                        Padding="0"
+                        HeightRequest="48"
+                        WidthRequest="54"
+                        VerticalOptions="Center" />
+            </Grid>
+        </Grid>
+
+            <controls:BottomNavigationBar Grid.Row="1"
+                                          ActiveTab="Chat" />
+        </Grid>
+
+        <Grid x:Name="SaveNotePopup"
+              IsVisible="False"
+              BackgroundColor="#99000000"
+              Padding="28">
+            <Border BackgroundColor="#FFFFFF"
+                    Stroke="{StaticResource Line}"
+                    StrokeThickness="1"
+                    Padding="18"
+                    VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="18" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="14">
+                    <VerticalStackLayout Spacing="3">
+                        <Label Text="Salvar resposta"
+                               TextColor="{StaticResource SageDark}"
+                               FontSize="21"
+                               FontAttributes="Bold"
+                               FontFamily="OpenSansSemibold" />
+                        <Label Text="Escolha onde essa nota sera guardada"
+                               TextColor="{StaticResource SoftText}"
+                               FontSize="12" />
+                    </VerticalStackLayout>
+
+                    <Border BackgroundColor="#FAFBF8"
+                            Stroke="{StaticResource Line}"
                             StrokeThickness="1"
-                            Padding="16,13">
+                            Padding="12,10">
                         <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="16" />
+                            <RoundRectangle CornerRadius="10" />
                         </Border.StrokeShape>
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Sondagem Vesical"
-                                   TextColor="{StaticResource OliveText}"
-                                   FontSize="12"
-                                   FontAttributes="Bold" />
-                            <Label Text="Protocolos de alivio a demora..."
-                                   TextColor="#4F584C"
-                                   FontSize="12"
-                                   LineBreakMode="WordWrap" />
-                        </VerticalStackLayout>
+                        <Label x:Name="SaveNotePreviewLabel"
+                               TextColor="{StaticResource BodyText}"
+                               FontSize="13"
+                               LineBreakMode="TailTruncation"
+                               MaxLines="3" />
                     </Border>
 
-                    <Border Grid.Column="1"
-                            BackgroundColor="{StaticResource CardFill}"
-                            Stroke="#EEF0EC"
-                            StrokeThickness="1"
-                            Padding="16,13">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="16" />
-                        </Border.StrokeShape>
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Calculo de Dose"
-                                   TextColor="{StaticResource OliveText}"
-                                   FontSize="12"
-                                   FontAttributes="Bold" />
-                            <Label Text="Gotejamento e microgotas..."
-                                   TextColor="#4F584C"
-                                   FontSize="12"
-                                   LineBreakMode="WordWrap" />
-                        </VerticalStackLayout>
-                    </Border>
+                    <VerticalStackLayout Spacing="7">
+                        <Label Text="Pasta"
+                               TextColor="{StaticResource BodyText}"
+                               FontSize="12"
+                               FontAttributes="Bold" />
+                        <CollectionView x:Name="SaveFolderCollection"
+                                        ItemsSource="{Binding SaveFolderOptions}"
+                                        SelectionMode="None"
+                                        HeightRequest="142">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical"
+                                                   ItemSpacing="8" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="pages:SaveFolderOption">
+                                    <Border BackgroundColor="{Binding BackgroundColor}"
+                                            Stroke="{Binding StrokeColor}"
+                                            StrokeThickness="1"
+                                            Padding="12,0"
+                                            HeightRequest="36">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSaveFolderTapped" />
+                                        </Border.GestureRecognizers>
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="9" />
+                                        </Border.StrokeShape>
+                                        <Label Text="{Binding Name}"
+                                               TextColor="{Binding TextColor}"
+                                               FontSize="13"
+                                               FontAttributes="Bold"
+                                               VerticalOptions="Center"
+                                               LineBreakMode="TailTruncation" />
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
 
-                    <Border Grid.Row="1"
-                            BackgroundColor="{StaticResource CardFill}"
-                            Stroke="#EEF0EC"
-                            StrokeThickness="1"
-                            Padding="16,13">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="16" />
-                        </Border.StrokeShape>
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Sinais Vitais"
-                                   TextColor="{StaticResource OliveText}"
-                                   FontSize="12"
-                                   FontAttributes="Bold" />
-                            <Label Text="Valores de referencia por idade..."
-                                   TextColor="#4F584C"
-                                   FontSize="12"
-                                   LineBreakMode="WordWrap" />
-                        </VerticalStackLayout>
-                    </Border>
-
-                    <Border Grid.Row="1"
-                            Grid.Column="1"
-                            BackgroundColor="{StaticResource CardFill}"
-                            Stroke="#EEF0EC"
-                            StrokeThickness="1"
-                            Padding="16,13">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="16" />
-                        </Border.StrokeShape>
-                        <VerticalStackLayout Spacing="6">
-                            <Label Text="Curativos"
-                                   TextColor="{StaticResource OliveText}"
-                                   FontSize="12"
-                                   FontAttributes="Bold" />
-                            <Label Text="Tipos de cobertura para LPP..."
-                                   TextColor="#4F584C"
-                                   FontSize="12"
-                                   LineBreakMode="WordWrap" />
-                        </VerticalStackLayout>
-                    </Border>
-                </Grid>
-            </VerticalStackLayout>
-        </ScrollView>
-
-        <controls:BottomNavigationBar Grid.Row="1"
-                                      ActiveTab="Chat" />
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="10">
+                        <Button Text="Cancelar"
+                                Clicked="OnCancelSaveNoteClicked"
+                                BackgroundColor="#FFFFFF"
+                                BorderColor="{StaticResource Line}"
+                                BorderWidth="1"
+                                TextColor="{StaticResource SageDark}"
+                                FontSize="13"
+                                FontAttributes="Bold"
+                                CornerRadius="10"
+                                HeightRequest="44" />
+                        <Button Grid.Column="1"
+                                Text="Salvar"
+                                Clicked="OnConfirmSaveNoteClicked"
+                                BackgroundColor="{StaticResource Sage}"
+                                TextColor="White"
+                                FontSize="13"
+                                FontAttributes="Bold"
+                                CornerRadius="10"
+                                HeightRequest="44" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
     </Grid>
 </ContentPage>

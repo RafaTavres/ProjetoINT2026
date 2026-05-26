@@ -21,7 +21,7 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>ProjetoINT2026</ApplicationTitle>
+		<ApplicationTitle>Florence</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.projetoint2026</ApplicationId>

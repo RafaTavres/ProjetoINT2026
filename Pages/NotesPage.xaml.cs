@@ -1,60 +1,151 @@
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
 namespace ProjetoINT2026.Pages;
 
 public partial class NotesPage : ContentPage
 {
-	private readonly ObservableCollection<NoteItem> notes =
-	[
-		new("Anatomia 01", "# Anatomia Humana\n\nO sistema circulatorio e composto pelo coracao e vasos sanguineos...\n\n## Pontos Importantes:\n- Ventriculo Esquerdo\n- Aorta Ascendente\n- Sistole e Diastole"),
-		new("Farmacologia", "# Farmacologia\n\nAnote indicacoes, contraindicacoes e calculos de dose.\n\n## Revisar\n- Diluicao\n- Intervalo entre doses\n- Cuidados antes da administracao"),
-		new("Triagem", "# Triagem\n\nFluxo rapido para classificar prioridade e registrar sinais vitais.\n\n## Checar\n- PA\n- FC\n- FR\n- Temperatura"),
-		new("Estagio Q3", "# Estagio Q3\n\nResumo do turno, tarefas pendentes e pontos para estudar depois.")
-	];
-
+	private readonly System.Collections.ObjectModel.ObservableCollection<NoteItem> visibleNotes = [];
 	private NoteItem? selectedNote;
+	private FolderItem? selectedFolder;
 	private bool isLoadingNote;
 
 	public NotesPage()
 	{
 		InitializeComponent();
 
-		NotesCollection.ItemsSource = notes;
-		SelectNote(notes[0]);
+		FoldersCollection.ItemsSource = NoteStore.Folders;
+		NotesCollection.ItemsSource = visibleNotes;
+		SelectFolder(NoteStore.Folders[0]);
 	}
 
 	private void SelectNote(NoteItem note)
 	{
 		isLoadingNote = true;
 		selectedNote = note;
-		NotesCollection.SelectedItem = note;
+
+		foreach (var item in visibleNotes)
+		{
+			item.IsSelected = item == note;
+		}
+
 		TitleEntry.Text = note.Title;
 		NoteEditor.Text = note.Content;
 		StatusLabel.Text = $"Editando {note.Title}";
 		isLoadingNote = false;
 	}
 
-	private void OnNoteSelectionChanged(object sender, SelectionChangedEventArgs e)
+	private void SelectFolder(FolderItem folder)
 	{
-		if (e.CurrentSelection.FirstOrDefault() is NoteItem note && note != selectedNote)
+		selectedFolder = folder;
+
+		foreach (var item in NoteStore.Folders)
+		{
+			item.IsSelected = item == folder;
+		}
+
+		RefreshVisibleNotes();
+		FolderContextLabel.Text = $"Pasta: {folder.Name}";
+
+		if (visibleNotes.Count > 0)
+		{
+			SelectNote(visibleNotes[0]);
+			return;
+		}
+
+		var note = NoteStore.AddBlankNote(folder.Name);
+		RefreshVisibleNotes();
+		SelectNote(note);
+	}
+
+	private void RefreshVisibleNotes()
+	{
+		visibleNotes.Clear();
+
+		if (selectedFolder is null)
+		{
+			return;
+		}
+
+		foreach (var note in NoteStore.Notes.Where(note => note.FolderName == selectedFolder.Name))
+		{
+			visibleNotes.Add(note);
+		}
+	}
+
+	private void OnFolderTapped(object sender, TappedEventArgs e)
+	{
+		if (sender is Border { BindingContext: FolderItem folder } && folder != selectedFolder)
+		{
+			SelectFolder(folder);
+		}
+	}
+
+	private void OnNoteTapped(object sender, TappedEventArgs e)
+	{
+		if (sender is Border { BindingContext: NoteItem note } && note != selectedNote)
 		{
 			SelectNote(note);
 		}
 	}
 
-	private void OnAddNoteTapped(object sender, TappedEventArgs e)
+	private void OnAddNoteClicked(object sender, TappedEventArgs e)
 	{
-		var noteNumber = notes.Count + 1;
-		var note = new NoteItem($"Nota {noteNumber:00}", "# Nova Nota\n\nEscreva aqui seus pontos principais.\n\n## Checklist\n- ");
-
-		notes.Add(note);
+		var note = NoteStore.AddBlankNote(selectedFolder?.Name ?? "Estudos");
+		RefreshVisibleNotes();
 		SelectNote(note);
 		TitleEntry.Focus();
 	}
 
-	private async void OnShareNoteTapped(object sender, TappedEventArgs e)
+	private async void OnAddFolderClicked(object sender, TappedEventArgs e)
+	{
+		var folderName = await DisplayPromptAsync("Nova pasta", "Nome da pasta", "Criar", "Cancelar", "Ex: Procedimentos", maxLength: 28);
+		if (string.IsNullOrWhiteSpace(folderName))
+		{
+			return;
+		}
+
+		folderName = folderName.Trim();
+		var existingFolder = NoteStore.Folders.FirstOrDefault(folder => string.Equals(folder.Name, folderName, StringComparison.OrdinalIgnoreCase));
+		if (existingFolder is not null)
+		{
+			SelectFolder(existingFolder);
+			return;
+		}
+
+		var folder = new FolderItem(folderName);
+		NoteStore.Folders.Add(folder);
+		SelectFolder(folder);
+	}
+
+	private async void OnDeleteFolderClicked(object sender, TappedEventArgs e)
+	{
+		if (selectedFolder is null)
+		{
+			return;
+		}
+
+		var folderName = selectedFolder.Name;
+		var notesInFolder = NoteStore.Notes.Count(note => note.FolderName == folderName);
+		var shouldDelete = await DisplayAlert("Apagar pasta", $"Apagar a pasta {folderName} e {notesInFolder} nota(s)?", "Apagar", "Cancelar");
+		if (!shouldDelete)
+		{
+			return;
+		}
+
+		var folderIndex = NoteStore.Folders.IndexOf(selectedFolder);
+		foreach (var note in NoteStore.Notes.Where(note => note.FolderName == folderName).ToList())
+		{
+			NoteStore.Notes.Remove(note);
+		}
+
+		NoteStore.Folders.Remove(selectedFolder);
+		if (NoteStore.Folders.Count == 0)
+		{
+			NoteStore.Folders.Add(new FolderItem("Estudos"));
+		}
+
+		SelectFolder(NoteStore.Folders[Math.Min(folderIndex, NoteStore.Folders.Count - 1)]);
+	}
+
+	private async void OnShareNoteClicked(object sender, TappedEventArgs e)
 	{
 		if (selectedNote is null)
 		{
@@ -68,7 +159,7 @@ public partial class NotesPage : ContentPage
 		});
 	}
 
-	private async void OnDeleteNoteTapped(object sender, TappedEventArgs e)
+	private async void OnDeleteNoteClicked(object sender, TappedEventArgs e)
 	{
 		if (selectedNote is null)
 		{
@@ -81,18 +172,28 @@ public partial class NotesPage : ContentPage
 			return;
 		}
 
-		var index = notes.IndexOf(selectedNote);
-		notes.Remove(selectedNote);
+		var visibleIndex = visibleNotes.IndexOf(selectedNote);
+		NoteStore.Notes.Remove(selectedNote);
+		RefreshVisibleNotes();
 
-		if (notes.Count == 0)
+		if (NoteStore.Notes.Count == 0)
 		{
-			var emptyNote = new NoteItem("Nota 01", "# Nova Nota\n\n");
-			notes.Add(emptyNote);
+			var emptyNote = new NoteItem("Nota 01", "# Nova Nota\n\n", selectedFolder?.Name ?? "Estudos");
+			NoteStore.Notes.Add(emptyNote);
+			RefreshVisibleNotes();
 			SelectNote(emptyNote);
 			return;
 		}
 
-		SelectNote(notes[Math.Min(index, notes.Count - 1)]);
+		if (visibleNotes.Count == 0)
+		{
+			var note = NoteStore.AddBlankNote(selectedFolder?.Name ?? "Estudos");
+			RefreshVisibleNotes();
+			SelectNote(note);
+			return;
+		}
+
+		SelectNote(visibleNotes[Math.Min(visibleIndex, visibleNotes.Count - 1)]);
 	}
 
 	private void OnTitleChanged(object sender, TextChangedEventArgs e)
@@ -114,57 +215,5 @@ public partial class NotesPage : ContentPage
 		}
 
 		selectedNote.Content = e.NewTextValue ?? string.Empty;
-	}
-}
-
-public sealed class NoteItem : INotifyPropertyChanged
-{
-	private string title;
-	private string content;
-
-	public NoteItem(string title, string content)
-	{
-		this.title = title;
-		this.content = content;
-	}
-
-	public event PropertyChangedEventHandler? PropertyChanged;
-
-	public string Title
-	{
-		get => title;
-		set
-		{
-			if (title == value)
-			{
-				return;
-			}
-
-			title = value;
-			OnPropertyChanged();
-			OnPropertyChanged(nameof(FileName));
-		}
-	}
-
-	public string Content
-	{
-		get => content;
-		set
-		{
-			if (content == value)
-			{
-				return;
-			}
-
-			content = value;
-			OnPropertyChanged();
-		}
-	}
-
-	public string FileName => Title.EndsWith(".md", StringComparison.OrdinalIgnoreCase) ? Title : $"{Title}.md";
-
-	private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 }

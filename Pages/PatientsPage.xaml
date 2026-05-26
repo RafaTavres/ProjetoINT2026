@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ProjetoINT2026.Controls"
+             xmlns:pages="clr-namespace:ProjetoINT2026.Pages"
              x:Class="ProjetoINT2026.Pages.PatientsPage"
+             x:DataType="pages:PatientsPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="#FCFCFA">
 
@@ -13,310 +15,431 @@
         <Color x:Key="OliveText">#536B50</Color>
         <Color x:Key="BodyText">#20251F</Color>
         <Color x:Key="SoftText">#777D75</Color>
+        <Color x:Key="Line">#E1E5DD</Color>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="*,86">
-        <ScrollView Grid.Row="0">
-            <VerticalStackLayout Padding="28,44,28,24"
-                                 Spacing="22">
-                <Grid ColumnDefinitions="*,56">
-                    <Label Text="Pacientes"
-                           TextColor="{StaticResource OliveText}"
-                           FontSize="36"
-                           FontAttributes="Bold"
-                           FontFamily="OpenSansSemibold"
-                           VerticalOptions="Center" />
+    <Grid>
+        <Grid RowDefinitions="*,86">
+            <Grid x:Name="PatientListView"
+                  Grid.Row="0"
+                  RowDefinitions="84,58,*"
+                  Padding="26,36,26,0">
+                <Grid ColumnDefinitions="*,52">
+                    <VerticalStackLayout Spacing="0"
+                                         VerticalOptions="Center">
+                        <Label Text="Pacientes"
+                               TextColor="{StaticResource OliveText}"
+                               FontSize="36"
+                               FontAttributes="Bold"
+                               FontFamily="OpenSansSemibold" />
+                        <Label Text="Escolha um caso para treinar diagnosticos"
+                               TextColor="{StaticResource SoftText}"
+                               FontSize="12" />
+                    </VerticalStackLayout>
 
                     <Border Grid.Column="1"
                             BackgroundColor="{StaticResource Sage}"
                             StrokeThickness="0"
-                            HeightRequest="52"
-                            WidthRequest="52"
+                            HeightRequest="48"
+                            WidthRequest="48"
                             HorizontalOptions="End"
                             VerticalOptions="Center">
                         <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="26" />
+                            <RoundRectangle CornerRadius="24" />
                         </Border.StrokeShape>
                         <Label Text="+"
                                TextColor="White"
-                               FontSize="38"
+                               FontSize="34"
                                HorizontalOptions="Center"
                                VerticalOptions="Center"
                                Margin="0,-4,0,0" />
                     </Border>
                 </Grid>
 
-                <Border BackgroundColor="#FFFFFF"
-                        Stroke="#E1E5DD"
+                <Border Grid.Row="1"
+                        BackgroundColor="#FFFFFF"
+                        Stroke="{StaticResource Line}"
                         StrokeThickness="1"
-                        HeightRequest="54"
-                        Padding="16,0">
+                        HeightRequest="50"
+                        Padding="15,0">
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="18" />
+                        <RoundRectangle CornerRadius="16" />
                     </Border.StrokeShape>
-                    <Grid ColumnDefinitions="28,*"
+                    <Grid ColumnDefinitions="26,*"
                           ColumnSpacing="8">
                         <Image Source="icon_search.svg"
-                               HeightRequest="22"
-                               WidthRequest="22"
+                               HeightRequest="20"
+                               WidthRequest="20"
                                VerticalOptions="Center" />
                         <Entry Grid.Column="1"
                                Placeholder="Buscar paciente..."
                                PlaceholderColor="{StaticResource SoftText}"
                                TextColor="{StaticResource BodyText}"
-                               FontSize="16"
+                               FontSize="15"
                                BackgroundColor="Transparent"
                                ClearButtonVisibility="WhileEditing"
                                VerticalOptions="Center" />
                     </Grid>
                 </Border>
 
-                <VerticalStackLayout Spacing="14"
-                                     Margin="0,4,0,0">
-                    <Border BackgroundColor="#FFFFFF"
-                            Stroke="#E5E8E1"
-                            StrokeThickness="1"
-                            HeightRequest="106"
-                            Padding="16,0">
-                        <Border.Shadow>
-                            <Shadow Brush="#24000000"
-                                    Offset="0,7"
-                                    Radius="16"
-                                    Opacity="0.18" />
-                        </Border.Shadow>
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="16" />
-                        </Border.StrokeShape>
-                        <Grid ColumnDefinitions="72,*,24,22"
-                              ColumnSpacing="14"
-                              VerticalOptions="Center">
-                            <Grid HeightRequest="64"
-                                  WidthRequest="64"
-                                  VerticalOptions="Center">
-                                <Ellipse Fill="{StaticResource SagePale}" />
-                                <Ellipse Fill="{StaticResource Sage}"
-                                         HeightRequest="25"
-                                         WidthRequest="25"
-                                         HorizontalOptions="Center"
-                                         VerticalOptions="Start"
-                                         Margin="0,11,0,0" />
-                                <Ellipse Fill="{StaticResource Sage}"
-                                         HeightRequest="38"
-                                         WidthRequest="48"
-                                         HorizontalOptions="Center"
-                                         VerticalOptions="End"
-                                         Margin="0,0,0,7" />
-                            </Grid>
-                            <Label Grid.Column="1"
-                                   Text="Carlos Silva"
-                                   TextColor="{StaticResource BodyText}"
-                                   FontSize="22"
-                                   FontAttributes="Bold"
-                                   VerticalOptions="Center" />
-                            <Border Grid.Column="2"
-                                    BackgroundColor="{StaticResource SageSoft}"
-                                    StrokeThickness="0"
-                                    HeightRequest="18"
-                                    WidthRequest="20"
-                                    VerticalOptions="Center">
+                <CollectionView Grid.Row="2"
+                                ItemsSource="{Binding Patients}"
+                                SelectionMode="None"
+                                Margin="0,14,0,0">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical"
+                                           ItemSpacing="14" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="pages:PatientCase">
+                            <Border BackgroundColor="#FFFFFF"
+                                    Stroke="{StaticResource Line}"
+                                    StrokeThickness="1"
+                                    Padding="16,14">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPatientTapped" />
+                                </Border.GestureRecognizers>
+                                <Border.Shadow>
+                                    <Shadow Brush="#22000000"
+                                            Offset="0,6"
+                                            Radius="14"
+                                            Opacity="0.16" />
+                                </Border.Shadow>
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="7" />
+                                    <RoundRectangle CornerRadius="14" />
                                 </Border.StrokeShape>
+                                <Grid ColumnDefinitions="58,*,26"
+                                      ColumnSpacing="14">
+                                    <Grid HeightRequest="54"
+                                          WidthRequest="54">
+                                        <Ellipse Fill="{StaticResource SagePale}" />
+                                        <Ellipse Fill="{StaticResource Sage}"
+                                                 HeightRequest="21"
+                                                 WidthRequest="21"
+                                                 HorizontalOptions="Center"
+                                                 VerticalOptions="Start"
+                                                 Margin="0,9,0,0" />
+                                        <Ellipse Fill="{StaticResource Sage}"
+                                                 HeightRequest="31"
+                                                 WidthRequest="40"
+                                                 HorizontalOptions="Center"
+                                                 VerticalOptions="End"
+                                                 Margin="0,0,0,6" />
+                                    </Grid>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="2"
+                                                         VerticalOptions="Center">
+                                        <Label Text="{Binding Name}"
+                                               TextColor="{StaticResource BodyText}"
+                                               FontSize="19"
+                                               FontAttributes="Bold"
+                                               LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding CaseSummary}"
+                                               TextColor="{StaticResource SoftText}"
+                                               FontSize="12"
+                                               LineBreakMode="TailTruncation" />
+                                    </VerticalStackLayout>
+
+                                    <Label Grid.Column="2"
+                                           Text=">"
+                                           TextColor="#6E746D"
+                                           FontSize="30"
+                                           HorizontalOptions="End"
+                                           VerticalOptions="Center" />
+                                </Grid>
                             </Border>
-                            <Label Grid.Column="3"
-                                   Text=">"
-                                   TextColor="#6E746D"
-                                   FontSize="38"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="End"
-                                   Margin="0,-4,0,0" />
-                        </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+
+            <Grid x:Name="PatientDetailView"
+                  Grid.Row="0"
+                  IsVisible="False"
+                  RowDefinitions="104,50,*"
+                  Padding="22,34,22,0">
+                <Grid ColumnDefinitions="36,*,44"
+                      RowDefinitions="38,54">
+                    <Label Text="&lt;"
+                           TextColor="{StaticResource Sage}"
+                           FontSize="30"
+                           VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnBackToPatientsTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+
+                    <Label x:Name="PatientNameLabel"
+                           Grid.Column="1"
+                           TextColor="{StaticResource BodyText}"
+                           FontSize="26"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           LineBreakMode="TailTruncation" />
+
+                    <Border Grid.Column="2"
+                            BackgroundColor="{StaticResource Sage}"
+                            StrokeThickness="0"
+                            HeightRequest="40"
+                            WidthRequest="40"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnActionsTapped" />
+                        </Border.GestureRecognizers>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Label Text="+"
+                               TextColor="White"
+                               FontSize="30"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               Margin="0,-4,0,0" />
                     </Border>
 
-                    <Border BackgroundColor="#FFFFFF"
-                            Stroke="#E5E8E1"
-                            StrokeThickness="1"
-                            HeightRequest="106"
-                            Padding="16,0">
-                        <Border.Shadow>
-                            <Shadow Brush="#24000000"
-                                    Offset="0,7"
-                                    Radius="16"
-                                    Opacity="0.18" />
-                        </Border.Shadow>
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="16" />
-                        </Border.StrokeShape>
-                        <Grid ColumnDefinitions="72,*,24,22"
-                              ColumnSpacing="14"
-                              VerticalOptions="Center">
-                            <Grid HeightRequest="64"
-                                  WidthRequest="64"
-                                  VerticalOptions="Center">
-                                <Ellipse Fill="{StaticResource SagePale}" />
-                                <Ellipse Fill="{StaticResource Sage}"
-                                         HeightRequest="25"
-                                         WidthRequest="25"
+                    <VerticalStackLayout Grid.Row="1"
+                                         Grid.ColumnSpan="3"
+                                         Spacing="2"
                                          HorizontalOptions="Center"
-                                         VerticalOptions="Start"
-                                         Margin="0,11,0,0" />
-                                <Ellipse Fill="{StaticResource Sage}"
-                                         HeightRequest="38"
-                                         WidthRequest="48"
-                                         HorizontalOptions="Center"
-                                         VerticalOptions="End"
-                                         Margin="0,0,0,7" />
-                            </Grid>
-                            <Label Grid.Column="1"
-                                   Text="Mateus Oliveira"
-                                   TextColor="{StaticResource BodyText}"
-                                   FontSize="21"
-                                   FontAttributes="Bold"
-                                   VerticalOptions="Center" />
-                            <Border Grid.Column="2"
-                                    BackgroundColor="{StaticResource SageSoft}"
-                                    StrokeThickness="0"
-                                    HeightRequest="18"
-                                    WidthRequest="20"
-                                    VerticalOptions="Center">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="7" />
-                                </Border.StrokeShape>
-                            </Border>
-                            <Label Grid.Column="3"
-                                   Text=">"
-                                   TextColor="#6E746D"
-                                   FontSize="38"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="End"
-                                   Margin="0,-4,0,0" />
-                        </Grid>
+                                         VerticalOptions="Center">
+                        <Label x:Name="PatientMetaLabel"
+                               TextColor="{StaticResource BodyText}"
+                               FontSize="14"
+                               HorizontalOptions="Center" />
+                        <Label Text="Caso de treino clinico"
+                               TextColor="{StaticResource SoftText}"
+                               FontSize="12"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Grid Grid.Row="1"
+                      ColumnDefinitions="*,*,*"
+                      ColumnSpacing="8">
+                    <Border x:Name="SummaryTab"
+                            StrokeThickness="0"
+                            BackgroundColor="Transparent">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSummaryTabTapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="6"
+                                             VerticalOptions="Center">
+                            <Label x:Name="SummaryTabLabel"
+                                   Text="Resumo"
+                                   FontSize="15"
+                                   HorizontalOptions="Center" />
+                            <BoxView x:Name="SummaryTabLine"
+                                     HeightRequest="3"
+                                     WidthRequest="76"
+                                     CornerRadius="2"
+                                     HorizontalOptions="Center" />
+                        </VerticalStackLayout>
                     </Border>
 
-                    <Border BackgroundColor="#FFFFFF"
-                            Stroke="#E5E8E1"
-                            StrokeThickness="1"
-                            HeightRequest="106"
-                            Padding="16,0">
-                        <Border.Shadow>
-                            <Shadow Brush="#24000000"
-                                    Offset="0,7"
-                                    Radius="16"
-                                    Opacity="0.18" />
-                        </Border.Shadow>
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="16" />
-                        </Border.StrokeShape>
-                        <Grid ColumnDefinitions="72,*,24,22"
-                              ColumnSpacing="14"
-                              VerticalOptions="Center">
-                            <Grid HeightRequest="64"
-                                  WidthRequest="64"
-                                  VerticalOptions="Center">
-                                <Ellipse Fill="{StaticResource SagePale}" />
-                                <Ellipse Fill="{StaticResource Sage}"
-                                         HeightRequest="25"
-                                         WidthRequest="25"
-                                         HorizontalOptions="Center"
-                                         VerticalOptions="Start"
-                                         Margin="0,11,0,0" />
-                                <Ellipse Fill="{StaticResource Sage}"
-                                         HeightRequest="38"
-                                         WidthRequest="48"
-                                         HorizontalOptions="Center"
-                                         VerticalOptions="End"
-                                         Margin="0,0,0,7" />
-                            </Grid>
-                            <Label Grid.Column="1"
-                                   Text="Ana Beatriz"
-                                   TextColor="{StaticResource BodyText}"
-                                   FontSize="22"
-                                   FontAttributes="Bold"
-                                   VerticalOptions="Center" />
-                            <Border Grid.Column="2"
-                                    BackgroundColor="{StaticResource SageSoft}"
-                                    StrokeThickness="0"
-                                    HeightRequest="18"
-                                    WidthRequest="20"
-                                    VerticalOptions="Center">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="7" />
-                                </Border.StrokeShape>
-                            </Border>
-                            <Label Grid.Column="3"
-                                   Text=">"
-                                   TextColor="#6E746D"
-                                   FontSize="38"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="End"
-                                   Margin="0,-4,0,0" />
-                        </Grid>
+                    <Border Grid.Column="1"
+                            StrokeThickness="0"
+                            BackgroundColor="Transparent">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnHistoryTabTapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="6"
+                                             VerticalOptions="Center">
+                            <Label x:Name="HistoryTabLabel"
+                                   Text="Historico"
+                                   FontSize="15"
+                                   HorizontalOptions="Center" />
+                            <BoxView x:Name="HistoryTabLine"
+                                     HeightRequest="3"
+                                     WidthRequest="76"
+                                     CornerRadius="2"
+                                     HorizontalOptions="Center" />
+                        </VerticalStackLayout>
                     </Border>
 
-                    <Border BackgroundColor="#FFFFFF"
-                            Stroke="#E5E8E1"
-                            StrokeThickness="1"
-                            HeightRequest="106"
-                            Padding="16,0">
-                        <Border.Shadow>
-                            <Shadow Brush="#24000000"
-                                    Offset="0,7"
-                                    Radius="16"
-                                    Opacity="0.18" />
-                        </Border.Shadow>
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="16" />
-                        </Border.StrokeShape>
-                        <Grid ColumnDefinitions="72,*,24,22"
-                              ColumnSpacing="14"
-                              VerticalOptions="Center">
-                            <Grid HeightRequest="64"
-                                  WidthRequest="64"
-                                  VerticalOptions="Center">
-                                <Ellipse Fill="{StaticResource SagePale}" />
-                                <Ellipse Fill="{StaticResource Sage}"
-                                         HeightRequest="25"
-                                         WidthRequest="25"
-                                         HorizontalOptions="Center"
-                                         VerticalOptions="Start"
-                                         Margin="0,11,0,0" />
-                                <Ellipse Fill="{StaticResource Sage}"
-                                         HeightRequest="38"
-                                         WidthRequest="48"
-                                         HorizontalOptions="Center"
-                                         VerticalOptions="End"
-                                         Margin="0,0,0,7" />
-                            </Grid>
-                            <Label Grid.Column="1"
-                                   Text="Julia Costa"
-                                   TextColor="{StaticResource BodyText}"
-                                   FontSize="22"
-                                   FontAttributes="Bold"
-                                   VerticalOptions="Center" />
-                            <Border Grid.Column="2"
-                                    BackgroundColor="{StaticResource SageSoft}"
-                                    StrokeThickness="0"
-                                    HeightRequest="18"
-                                    WidthRequest="20"
-                                    VerticalOptions="Center">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="7" />
-                                </Border.StrokeShape>
-                            </Border>
-                            <Label Grid.Column="3"
-                                   Text=">"
-                                   TextColor="#6E746D"
-                                   FontSize="38"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="End"
-                                   Margin="0,-4,0,0" />
-                        </Grid>
+                    <Border Grid.Column="2"
+                            StrokeThickness="0"
+                            BackgroundColor="Transparent">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnNotesTabTapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="6"
+                                             VerticalOptions="Center">
+                            <Label x:Name="NotesTabLabel"
+                                   Text="Anotacoes"
+                                   FontSize="15"
+                                   HorizontalOptions="Center" />
+                            <BoxView x:Name="NotesTabLine"
+                                     HeightRequest="3"
+                                     WidthRequest="76"
+                                     CornerRadius="2"
+                                     HorizontalOptions="Center" />
+                        </VerticalStackLayout>
                     </Border>
+                </Grid>
+
+                <Grid Grid.Row="2"
+                      Margin="0,12,0,0">
+                    <ScrollView x:Name="SummaryContent">
+                        <VerticalStackLayout Spacing="12"
+                                             Padding="0,0,0,18">
+                            <Border BackgroundColor="#FFFFFF"
+                                    Stroke="{StaticResource Line}"
+                                    StrokeThickness="1"
+                                    Padding="16,14">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="8">
+                                    <Label Text="Sinais vitais"
+                                           TextColor="{StaticResource BodyText}"
+                                           FontSize="17"
+                                           FontAttributes="Bold" />
+                                    <Label x:Name="VitalsLabel"
+                                           TextColor="{StaticResource BodyText}"
+                                           FontSize="14"
+                                           LineBreakMode="WordWrap" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border BackgroundColor="#FFFFFF"
+                                    Stroke="{StaticResource Line}"
+                                    StrokeThickness="1"
+                                    Padding="16,14">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="8">
+                                    <Label Text="Queixa principal"
+                                           TextColor="{StaticResource BodyText}"
+                                           FontSize="17"
+                                           FontAttributes="Bold" />
+                                    <Label x:Name="ComplaintLabel"
+                                           TextColor="{StaticResource BodyText}"
+                                           FontSize="14" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border BackgroundColor="#FFFFFF"
+                                    Stroke="{StaticResource Line}"
+                                    StrokeThickness="1"
+                                    Padding="16,14">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="8">
+                                    <Label Text="Diagnostico"
+                                           TextColor="{StaticResource BodyText}"
+                                           FontSize="17"
+                                           FontAttributes="Bold" />
+                                    <Label x:Name="DiagnosisLabel"
+                                           TextColor="{StaticResource BodyText}"
+                                           FontSize="14" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border BackgroundColor="#FFFFFF"
+                                    Stroke="{StaticResource Line}"
+                                    StrokeThickness="1"
+                                    Padding="16,14">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="8">
+                                    <Label Text="Cuidados"
+                                           TextColor="{StaticResource BodyText}"
+                                           FontSize="17"
+                                           FontAttributes="Bold" />
+                                    <Label x:Name="CareLabel"
+                                           TextColor="{StaticResource BodyText}"
+                                           FontSize="14"
+                                           LineBreakMode="WordWrap" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+                    </ScrollView>
+
+                    <ScrollView x:Name="HistoryContent"
+                                IsVisible="False">
+                        <VerticalStackLayout x:Name="HistoryStack"
+                                             Spacing="12"
+                                             Padding="0,0,0,18" />
+                    </ScrollView>
+
+                    <ScrollView x:Name="NotesContent"
+                                IsVisible="False">
+                        <VerticalStackLayout Spacing="14"
+                                             Padding="0,0,0,18">
+                            <Editor x:Name="PatientNotesEditor"
+                                    TextChanged="OnPatientNotesChanged"
+                                    TextColor="{StaticResource BodyText}"
+                                    FontSize="15"
+                                    AutoSize="TextChanges"
+                                    HeightRequest="260"
+                                    BackgroundColor="#FFFFFF"
+                                    Placeholder="Anote raciocinio, hipoteses, condutas e pontos de estudo..."
+                                    PlaceholderColor="{StaticResource SoftText}" />
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </Grid>
+            </Grid>
+
+            <controls:BottomNavigationBar Grid.Row="1"
+                                          ActiveTab="Patients" />
+        </Grid>
+
+        <Grid x:Name="ActionMenu"
+              IsVisible="False"
+              BackgroundColor="#66000000"
+              Padding="28">
+            <Border BackgroundColor="#FFFFFF"
+                    Stroke="{StaticResource Line}"
+                    StrokeThickness="1"
+                    Padding="18"
+                    VerticalOptions="End"
+                    Margin="0,0,0,92">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="18" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Acoes do treino"
+                           TextColor="{StaticResource OliveText}"
+                           FontSize="20"
+                           FontAttributes="Bold" />
+                    <Button Text="Diagnosticar"
+                            Clicked="OnDiagnoseClicked"
+                            BackgroundColor="{StaticResource Sage}"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            HeightRequest="44" />
+                    <Button Text="Receitar tratamento"
+                            Clicked="OnTreatmentClicked"
+                            BackgroundColor="#EEF4EC"
+                            TextColor="{StaticResource OliveText}"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            HeightRequest="44" />
+                    <Button Text="Solicitar exame"
+                            Clicked="OnExamClicked"
+                            BackgroundColor="#EEF4EC"
+                            TextColor="{StaticResource OliveText}"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            HeightRequest="44" />
+                    <Button Text="Cancelar"
+                            Clicked="OnCancelActionsClicked"
+                            BackgroundColor="#FFFFFF"
+                            BorderColor="{StaticResource Line}"
+                            BorderWidth="1"
+                            TextColor="{StaticResource SoftText}"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            HeightRequest="42" />
                 </VerticalStackLayout>
-            </VerticalStackLayout>
-        </ScrollView>
-
-        <controls:BottomNavigationBar Grid.Row="1"
-                                      ActiveTab="Patients" />
+            </Border>
+        </Grid>
     </Grid>
 </ContentPage>
