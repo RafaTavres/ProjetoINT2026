@@ -1,4 +1,6 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Microsoft.Maui.Controls.Shapes;
 
 namespace ProjetoINT2026.Pages;
@@ -24,55 +26,82 @@ public partial class PatientsPage : ContentPage
 			"Carlos Silva",
 			22,
 			"Masculino",
+			"Media",
 			"Dor abdominal, nausea e febre",
-			"PA: 120/80 mmHg\nFC: 78 bpm | FR: 18 irpm\nTemp.: 36,7 C | SpO2: 98%",
-			"Nao informado",
-			"Monitorar sinais vitais\nAdministrar medicacao conforme prescricao",
+			"PA: 120/80 mmHg\nFC: 96 bpm | FR: 20 irpm\nTemp.: 38,1 C | SpO2: 98%",
+			"Sem alergias conhecidas",
+			"Monitorar dor, temperatura e sinais de piora abdominal.",
+			"Apendicite",
+			["Hemograma", "Exame fisico abdominal", "Ultrassom abdominal"],
+			["Gastroenterite", "Apendicite", "Colica renal", "Infeccao urinaria"],
+			["Manter jejum, acesso venoso e comunicar equipe medica", "Antibiotico sem avaliacao", "Alta com analgesico", "Curativo simples"],
+			"Manter jejum, acesso venoso e comunicar equipe medica",
 			[
-				new("22/05/2024 08:30", "Paciente relatou dor abdominal, nauseas e febre. Aguardando exames."),
-				new("22/05/2024 14:10", "Administrado dipirona 1g EV conforme prescricao."),
-				new("22/05/2024 18:45", "Evoluiu bem, dor reduzida. Sinais vitais estaveis.")
+				new("08:30", "Paciente relata dor em fossa iliaca direita, nausea e febre desde a madrugada."),
+				new("09:10", "Dor piora ao caminhar. Sem vomitos no momento."),
+				new("09:35", "Exame fisico abdominal pode orientar a prioridade do caso.")
 			],
-			"Plano de cuidados\n- Monitorar dor abdominal\n- Reavaliar temperatura\n\nHipoteses\n- Gastroenterite\n- Apendicite inicial"),
+			"Observe sinais de irritacao peritoneal e evite fechar conduta sem exame fisico."),
 		new(
 			"Mateus Oliveira",
 			34,
 			"Masculino",
+			"Facil",
 			"Tosse produtiva e dispneia leve",
 			"PA: 130/84 mmHg\nFC: 92 bpm | FR: 22 irpm\nTemp.: 37,8 C | SpO2: 94%",
 			"Nao informado",
-			"Elevar cabeceira\nObservar padrao respiratorio",
+			"Elevar cabeceira, observar padrao respiratorio e saturacao.",
+			"Pneumonia",
+			["Ausculta pulmonar", "Radiografia de torax", "Oximetria seriada"],
+			["Pneumonia", "Migranea", "Apendicite", "Hipoglicemia"],
+			["Monitorar SpO2 e comunicar piora respiratoria", "Liberar sem orientacao", "Reduzir ingesta hidrica", "Aplicar curativo compressivo"],
+			"Monitorar SpO2 e comunicar piora respiratoria",
 			[
-				new("23/05/2024 09:00", "Relata tosse ha cinco dias, piora ao deitar."),
-				new("23/05/2024 11:30", "Ausculta com roncos difusos. Mantem saturacao limítrofe.")
+				new("09:00", "Relata tosse ha cinco dias, com secrecao amarelada."),
+				new("10:20", "Ausculta com roncos difusos. Saturacao limitrofe em ar ambiente."),
+				new("11:00", "Refere cansaco aos esforcos leves.")
 			],
-			"Solicitar RX se piora respiratoria.\nRegistrar resposta a broncodilatador."),
+			"Priorize avaliacao respiratoria, saturacao e sinais de desconforto."),
 		new(
 			"Ana Beatriz",
 			28,
 			"Feminino",
+			"Media",
 			"Cefaleia intensa e fotofobia",
 			"PA: 118/76 mmHg\nFC: 84 bpm | FR: 17 irpm\nTemp.: 36,5 C | SpO2: 99%",
 			"Dipirona",
-			"Ambiente calmo\nAvaliar sinais neurologicos",
+			"Ambiente calmo, avaliar escala de dor e sinais neurologicos.",
+			"Migranea",
+			["Escala de dor", "Avaliacao neurologica", "Sinais de alarme"],
+			["Meningite", "Migranea", "Crise hipertensiva", "Sinusite"],
+			["Reduzir estimulos, hidratar e reavaliar dor", "Antibiotico imediato", "Alta sem reavaliacao", "Jejum absoluto prolongado"],
+			"Reduzir estimulos, hidratar e reavaliar dor",
 			[
-				new("24/05/2024 10:15", "Paciente refere cefaleia pulsátil ha 6 horas."),
-				new("24/05/2024 12:00", "Sem rigidez de nuca. Orientada hidratacao.")
+				new("10:15", "Paciente refere cefaleia pulsatil ha 6 horas, com fotofobia."),
+				new("10:45", "Sem febre e sem rigidez de nuca relatada."),
+				new("11:20", "Dor melhora parcialmente em ambiente escuro.")
 			],
-			"Diferenciar migranea de sinais de alarme.\nAnotar escala de dor."),
+			"Diferencie migranea de sinais de alarme neurologicos."),
 		new(
 			"Julia Costa",
 			41,
 			"Feminino",
-			"Ferida operatória com hiperemia",
-			"PA: 126/82 mmHg\nFC: 88 bpm | FR: 18 irpm\nTemp.: 37,4 C | SpO2: 98%",
+			"Dificil",
+			"Ferida operatoria com hiperemia",
+			"PA: 126/82 mmHg\nFC: 102 bpm | FR: 18 irpm\nTemp.: 37,9 C | SpO2: 98%",
 			"Latex",
-			"Inspecionar ferida\nRegistrar aspecto do curativo",
+			"Inspecionar ferida, registrar aspecto e trocar curativo com tecnica limpa.",
+			"Infeccao de sitio cirurgico",
+			["Inspecao da ferida", "Temperatura seriada", "Cultura se secrecao"],
+			["Dermatite por contato", "Infeccao de sitio cirurgico", "Migranea", "Bronquite"],
+			["Comunicar sinais infecciosos e reforcar cuidado com curativo", "Cobrir sem avaliar", "Retirar pontos sem indicacao", "Ignorar alergia a latex"],
+			"Comunicar sinais infecciosos e reforcar cuidado com curativo",
 			[
-				new("25/05/2024 07:40", "Curativo com pequena secrecao serosa."),
-				new("25/05/2024 13:20", "Sem febre. Mantem dor local leve.")
+				new("07:40", "Curativo com pequena secrecao serosa e hiperemia ao redor."),
+				new("09:00", "Paciente relata dor local crescente desde ontem."),
+				new("11:30", "Temperatura em elevacao discreta.")
 			],
-			"Observar sinais flogisticos.\nChecar tecnica de curativo.")
+			"Observe secrecao, bordas, odor, dor, febre e alergias antes da conduta.")
 	];
 
 	private void OnPatientTapped(object sender, TappedEventArgs e)
@@ -85,24 +114,45 @@ public partial class PatientsPage : ContentPage
 		OpenPatient(patient);
 	}
 
+	private void OnGenerateCaseTapped(object sender, TappedEventArgs e)
+	{
+		var available = Patients.Where(patient => !patient.IsFinished).ToList();
+		var next = available.Count > 0 ? available[Random.Shared.Next(available.Count)] : Patients[Random.Shared.Next(Patients.Count)];
+		OpenPatient(next);
+	}
+
 	private void OpenPatient(PatientCase patient)
 	{
 		selectedPatient = patient;
 		PatientNameLabel.Text = patient.FirstName;
-		PatientMetaLabel.Text = $"{patient.Age} anos | {patient.Gender}";
+		PatientMetaLabel.Text = $"{patient.Age} anos | {patient.Gender} | {patient.Difficulty}";
 		VitalsLabel.Text = patient.Vitals;
 		ComplaintLabel.Text = patient.Complaint;
-		DiagnosisLabel.Text = patient.Diagnosis;
-		CareLabel.Text = patient.CarePlan;
 
 		isLoadingPatientNotes = true;
 		PatientNotesEditor.Text = patient.Notes;
 		isLoadingPatientNotes = false;
 
 		BuildHistory(patient);
+		RefreshSelectedPatientUi();
 		SetActiveTab(PatientTab.Summary);
 		PatientListView.IsVisible = false;
 		PatientDetailView.IsVisible = true;
+	}
+
+	private void RefreshSelectedPatientUi()
+	{
+		if (selectedPatient is null)
+		{
+			return;
+		}
+
+		CaseProgressLabel.Text = selectedPatient.StatusLine;
+		CaseScoreLabel.Text = selectedPatient.ScoreLine;
+		CaseActionStateLabel.Text = selectedPatient.ActionState;
+		CaseRewardLabel.Text = selectedPatient.RewardLine;
+		DiagnosisLabel.Text = selectedPatient.DisplayDiagnosis;
+		CareLabel.Text = selectedPatient.DisplayCarePlan;
 	}
 
 	private void BuildHistory(PatientCase patient)
@@ -167,6 +217,7 @@ public partial class PatientsPage : ContentPage
 		}
 
 		selectedPatient.Notes = e.NewTextValue ?? string.Empty;
+		RefreshSelectedPatientUi();
 	}
 
 	private void OnActionsTapped(object sender, TappedEventArgs e)
@@ -174,25 +225,75 @@ public partial class PatientsPage : ContentPage
 		ActionMenu.IsVisible = true;
 	}
 
+	private async void OnExamClicked(object sender, EventArgs e)
+	{
+		ActionMenu.IsVisible = false;
+		if (selectedPatient is null)
+		{
+			return;
+		}
+
+		var options = selectedPatient.GetExamOptions().ToArray();
+		var choice = await DisplayActionSheet("Solicitar exame", "Cancelar", null, options);
+		if (string.IsNullOrWhiteSpace(choice) || choice == "Cancelar")
+		{
+			return;
+		}
+
+		var feedback = selectedPatient.ApplyExam(choice);
+		RefreshSelectedPatientUi();
+		await DisplayAlert("Resultado do exame", feedback, "OK");
+	}
+
 	private async void OnDiagnoseClicked(object sender, EventArgs e)
 	{
 		ActionMenu.IsVisible = false;
-		await DisplayAlert("Diagnosticar", "Registre sua hipotese diagnostica nas anotacoes do paciente.", "OK");
-		SetActiveTab(PatientTab.Notes);
+		if (selectedPatient is null)
+		{
+			return;
+		}
+
+		var choice = await DisplayActionSheet("Qual sua hipotese principal?", "Cancelar", null, selectedPatient.DiagnosticOptions.ToArray());
+		if (string.IsNullOrWhiteSpace(choice) || choice == "Cancelar")
+		{
+			return;
+		}
+
+		var feedback = selectedPatient.ApplyDiagnosis(choice);
+		RefreshSelectedPatientUi();
+		await DisplayAlert("Diagnostico", feedback, "OK");
 	}
 
 	private async void OnTreatmentClicked(object sender, EventArgs e)
 	{
 		ActionMenu.IsVisible = false;
-		await DisplayAlert("Receitar tratamento", "Defina condutas e cuidados esperados para o caso.", "OK");
-		SetActiveTab(PatientTab.Notes);
+		if (selectedPatient is null)
+		{
+			return;
+		}
+
+		var choice = await DisplayActionSheet("Escolha a conduta", "Cancelar", null, selectedPatient.TreatmentOptions.ToArray());
+		if (string.IsNullOrWhiteSpace(choice) || choice == "Cancelar")
+		{
+			return;
+		}
+
+		var feedback = selectedPatient.ApplyTreatment(choice);
+		RefreshSelectedPatientUi();
+		await DisplayAlert("Conduta", feedback, "OK");
 	}
 
-	private async void OnExamClicked(object sender, EventArgs e)
+	private async void OnFinishCaseClicked(object sender, EventArgs e)
 	{
 		ActionMenu.IsVisible = false;
-		await DisplayAlert("Solicitar exame", "Escolha exames coerentes com a hipotese e justifique nas anotacoes.", "OK");
-		SetActiveTab(PatientTab.Notes);
+		if (selectedPatient is null)
+		{
+			return;
+		}
+
+		var report = selectedPatient.FinishCase();
+		RefreshSelectedPatientUi();
+		await DisplayAlert("Relatorio do caso", report, "OK");
 	}
 
 	private void OnCancelActionsClicked(object sender, EventArgs e)
@@ -208,38 +309,271 @@ public partial class PatientsPage : ContentPage
 	}
 }
 
-public sealed class PatientCase(
-	string name,
-	int age,
-	string gender,
-	string complaint,
-	string vitals,
-	string diagnosis,
-	string carePlan,
-	IReadOnlyList<PatientHistoryEntry> history,
-	string notes)
+public sealed class PatientCase : INotifyPropertyChanged
 {
-	public string Name { get; } = name;
+	private readonly HashSet<string> requestedExams = [];
+	private int score;
+	private bool hasCorrectDiagnosis;
+	private bool hasCorrectTreatment;
+	private bool isFinished;
+	private string? selectedDiagnosis;
+	private string? selectedTreatment;
+	private string notes;
+
+	public PatientCase(
+		string name,
+		int age,
+		string gender,
+		string difficulty,
+		string complaint,
+		string vitals,
+		string allergies,
+		string initialCarePlan,
+		string correctDiagnosis,
+		IReadOnlyList<string> recommendedExams,
+		IReadOnlyList<string> diagnosticOptions,
+		IReadOnlyList<string> treatmentOptions,
+		string correctTreatment,
+		IReadOnlyList<PatientHistoryEntry> history,
+		string notes)
+	{
+		Name = name;
+		Age = age;
+		Gender = gender;
+		Difficulty = difficulty;
+		Complaint = complaint;
+		Vitals = vitals;
+		Allergies = allergies;
+		InitialCarePlan = initialCarePlan;
+		CorrectDiagnosis = correctDiagnosis;
+		RecommendedExams = recommendedExams;
+		DiagnosticOptions = diagnosticOptions;
+		TreatmentOptions = treatmentOptions;
+		CorrectTreatment = correctTreatment;
+		History = history;
+		this.notes = notes;
+	}
+
+	public event PropertyChangedEventHandler? PropertyChanged;
+
+	public string Name { get; }
 
 	public string FirstName => Name.Split(' ')[0];
 
-	public int Age { get; } = age;
+	public int Age { get; }
 
-	public string Gender { get; } = gender;
+	public string Gender { get; }
 
-	public string Complaint { get; } = complaint;
+	public string Difficulty { get; }
+
+	public string Complaint { get; }
 
 	public string CaseSummary => $"{Age} anos | {Complaint}";
 
-	public string Vitals { get; } = vitals;
+	public string Vitals { get; }
 
-	public string Diagnosis { get; } = diagnosis;
+	public string Allergies { get; }
 
-	public string CarePlan { get; } = carePlan;
+	public string InitialCarePlan { get; }
 
-	public IReadOnlyList<PatientHistoryEntry> History { get; } = history;
+	public string CorrectDiagnosis { get; }
 
-	public string Notes { get; set; } = notes;
+	public IReadOnlyList<string> RecommendedExams { get; }
+
+	public IReadOnlyList<string> DiagnosticOptions { get; }
+
+	public IReadOnlyList<string> TreatmentOptions { get; }
+
+	public string CorrectTreatment { get; }
+
+	public IReadOnlyList<PatientHistoryEntry> History { get; }
+
+	public bool IsFinished
+	{
+		get => isFinished;
+		private set => SetField(ref isFinished, value);
+	}
+
+	public string Notes
+	{
+		get => notes;
+		set
+		{
+			if (SetField(ref notes, value))
+			{
+				NotifyProgressChanged();
+			}
+		}
+	}
+
+	public string DisplayDiagnosis => string.IsNullOrWhiteSpace(selectedDiagnosis)
+		? "Ainda nao definido. Use Acoes > Diagnosticar para registrar sua hipotese."
+		: $"{selectedDiagnosis} {(hasCorrectDiagnosis ? "(correto)" : "(revisar)")}";
+
+	public string DisplayCarePlan => string.IsNullOrWhiteSpace(selectedTreatment)
+		? InitialCarePlan
+		: selectedTreatment;
+
+	public string StatusLine
+	{
+		get
+		{
+			if (IsFinished)
+			{
+				return hasCorrectDiagnosis ? "Caso concluido com diagnostico correto" : "Caso concluido para revisao";
+			}
+
+			if (!string.IsNullOrWhiteSpace(selectedDiagnosis))
+			{
+				return "Diagnostico registrado";
+			}
+
+			if (requestedExams.Count > 0)
+			{
+				return $"{requestedExams.Count} exame(s) solicitado(s)";
+			}
+
+			return "Novo caso";
+		}
+	}
+
+	public string ScoreLine => $"{score}/100";
+
+	public string RewardLine => IsFinished ? $"+{Math.Max(score, 0)} XP" : "XP ao encerrar";
+
+	public string ActionState
+	{
+		get
+		{
+			var examState = requestedExams.Count == 0 ? "sem exames" : $"{requestedExams.Count} exame(s)";
+			var diagnosisState = string.IsNullOrWhiteSpace(selectedDiagnosis) ? "sem diagnostico" : "diagnostico feito";
+			var treatmentState = string.IsNullOrWhiteSpace(selectedTreatment) ? "sem conduta" : "conduta feita";
+			return $"{examState} | {diagnosisState} | {treatmentState}";
+		}
+	}
+
+	public IEnumerable<string> GetExamOptions()
+	{
+		var extras = new[] { "Glicemia capilar", "Eletrocardiograma", "Urina tipo 1", "Radiografia de torax" };
+		return RecommendedExams.Concat(extras).Distinct().Where(exam => !requestedExams.Contains(exam));
+	}
+
+	public string ApplyExam(string exam)
+	{
+		if (!requestedExams.Add(exam))
+		{
+			return "Esse exame ja foi solicitado.";
+		}
+
+		if (RecommendedExams.Contains(exam))
+		{
+			AddScore(15);
+			NotifyProgressChanged();
+			return "Boa escolha. Esse dado ajuda a sustentar o raciocinio do caso.";
+		}
+
+		AddScore(-5);
+		NotifyProgressChanged();
+		return "Exame pouco prioritario para este caso. Pense se ele muda sua conduta agora.";
+	}
+
+	public string ApplyDiagnosis(string diagnosis)
+	{
+		selectedDiagnosis = diagnosis;
+		hasCorrectDiagnosis = string.Equals(diagnosis, CorrectDiagnosis, StringComparison.OrdinalIgnoreCase);
+		AddScore(hasCorrectDiagnosis ? 35 : -15);
+		NotifyProgressChanged();
+
+		return hasCorrectDiagnosis
+			? "Diagnostico correto. Agora escolha uma conduta segura."
+			: $"Hipotese registrada, mas o caso aponta para {CorrectDiagnosis}. Revise os dados antes de encerrar.";
+	}
+
+	public string ApplyTreatment(string treatment)
+	{
+		selectedTreatment = treatment;
+		hasCorrectTreatment = string.Equals(treatment, CorrectTreatment, StringComparison.OrdinalIgnoreCase);
+		AddScore(hasCorrectTreatment ? 25 : -15);
+		NotifyProgressChanged();
+
+		return hasCorrectTreatment
+			? "Conduta adequada para o treino. Boa priorizacao de seguranca."
+			: "Conduta registrada, mas existe risco ou baixa prioridade nessa escolha.";
+	}
+
+	public string FinishCase()
+	{
+		if (Notes.Length >= 50)
+		{
+			AddScore(10);
+		}
+
+		if (requestedExams.Count == 0)
+		{
+			AddScore(-10);
+		}
+
+		if (string.IsNullOrWhiteSpace(selectedDiagnosis))
+		{
+			AddScore(-20);
+		}
+
+		if (string.IsNullOrWhiteSpace(selectedTreatment))
+		{
+			AddScore(-15);
+		}
+
+		IsFinished = true;
+		NotifyProgressChanged();
+
+		var grade = score switch
+		{
+			>= 90 => "Excelente conduta",
+			>= 70 => "Boa conduta",
+			>= 50 => "Conduta parcial",
+			_ => "Precisa revisar"
+		};
+
+		return $"{grade}\n\nPontuacao: {score}/100\nDiagnostico esperado: {CorrectDiagnosis}\nConduta esperada: {CorrectTreatment}\n\n{NotesFeedback}";
+	}
+
+	private string NotesFeedback => Notes.Length >= 50
+		? "Suas anotacoes ajudam a mostrar o raciocinio clinico."
+		: "Tente anotar hipoteses, dados que sustentam a decisao e sinais de alerta.";
+
+	private void AddScore(int points)
+	{
+		score = Math.Clamp(score + points, 0, 100);
+		OnPropertyChanged(nameof(ScoreLine));
+		OnPropertyChanged(nameof(RewardLine));
+	}
+
+	private void NotifyProgressChanged()
+	{
+		OnPropertyChanged(nameof(StatusLine));
+		OnPropertyChanged(nameof(ScoreLine));
+		OnPropertyChanged(nameof(RewardLine));
+		OnPropertyChanged(nameof(ActionState));
+		OnPropertyChanged(nameof(DisplayDiagnosis));
+		OnPropertyChanged(nameof(DisplayCarePlan));
+	}
+
+	private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+	{
+		if (EqualityComparer<T>.Default.Equals(field, value))
+		{
+			return false;
+		}
+
+		field = value;
+		OnPropertyChanged(propertyName);
+		return true;
+	}
+
+	private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
 }
 
 public sealed record PatientHistoryEntry(string Date, string Text);

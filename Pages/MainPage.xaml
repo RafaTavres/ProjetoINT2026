@@ -2,7 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ProjetoINT2026.Controls"
+             xmlns:pages="clr-namespace:ProjetoINT2026.Pages"
+             xmlns:services="clr-namespace:ProjetoINT2026.Services"
              x:Class="ProjetoINT2026.Pages.MainPage"
+             x:DataType="pages:MainPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="#FAFBF8">
 
@@ -15,87 +18,174 @@
     </ContentPage.Resources>
 
     <Grid RowDefinitions="*,86">
-        <ScrollView Grid.Row="0">
-            <VerticalStackLayout Padding="28,42,28,24"
-                                 Spacing="18">
-                <VerticalStackLayout Spacing="2">
+        <Grid Grid.Row="0"
+              RowDefinitions="100,38,190,*"
+              Padding="26,40,26,0">
+            <Grid>
+                <VerticalStackLayout Spacing="3"
+                                     VerticalOptions="Center">
                     <Label Text="Home"
                            TextColor="{StaticResource SageDark}"
                            FontSize="32"
                            FontAttributes="Bold"
                            FontFamily="OpenSansSemibold" />
-                    <Label Text="Atualizacoes e lembretes de estudo"
+                    <Label Text="Conteudos variados para estudar enfermagem"
                            TextColor="{StaticResource SoftText}"
                            FontSize="13" />
+                    <Label x:Name="FeedStatusLabel"
+                           Text="Atualizando feed..."
+                           TextColor="{StaticResource SoftText}"
+                           FontSize="11" />
                 </VerticalStackLayout>
+            </Grid>
 
-                <Border BackgroundColor="#FFFFFF"
-                        Stroke="{StaticResource Line}"
-                        StrokeThickness="1"
-                        Padding="16,14">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="8" />
-                    </Border.StrokeShape>
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Resumo do plantao"
-                               TextColor="{StaticResource SageDark}"
-                               FontSize="17"
-                               FontAttributes="Bold" />
-                        <Label Text="Revise sinais vitais, triagem e anotacoes importantes antes da proxima simulacao."
-                               TextColor="{StaticResource BodyText}"
-                               FontSize="14"
-                               LineBreakMode="WordWrap" />
-                        <Label Text="Hoje · Enfermagem"
-                               TextColor="{StaticResource SoftText}"
-                               FontSize="12" />
-                    </VerticalStackLayout>
-                </Border>
+            <Border Grid.Row="1"
+                    BackgroundColor="#EEF4EC"
+                    Stroke="#DDE7DA"
+                    StrokeThickness="1"
+                    Padding="12,0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+                <Label Text="Conteudo educativo. Nao substitui orientacao profissional ou protocolos da instituicao."
+                       TextColor="{StaticResource SageDark}"
+                       FontSize="11"
+                       VerticalOptions="Center"
+                       LineBreakMode="TailTruncation" />
+            </Border>
 
-                <Border BackgroundColor="#FFFFFF"
-                        Stroke="{StaticResource Line}"
-                        StrokeThickness="1"
-                        Padding="16,14">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="8" />
-                    </Border.StrokeShape>
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Caso para treinar"
-                               TextColor="{StaticResource SageDark}"
-                               FontSize="17"
-                               FontAttributes="Bold" />
-                        <Label Text="Paciente relata tontura e sudorese. Monte uma abordagem inicial e registre os dados essenciais."
-                               TextColor="{StaticResource BodyText}"
-                               FontSize="14"
-                               LineBreakMode="WordWrap" />
-                        <Label Text="Simulacao · Prioridade media"
-                               TextColor="{StaticResource SoftText}"
-                               FontSize="12" />
-                    </VerticalStackLayout>
-                </Border>
+            <Border Grid.Row="2"
+                    BindingContext="{Binding FeaturedPost}"
+                    BackgroundColor="#FFFFFF"
+                    Stroke="{StaticResource Line}"
+                    StrokeThickness="1"
+                    Margin="0,12,0,0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnPostTapped" />
+                </Border.GestureRecognizers>
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+                <Grid RowDefinitions="112,*"
+                      x:DataType="services:HealthPost">
+                    <Grid>
+                        <Image Source="{Binding ImageUrl}"
+                               IsVisible="{Binding HasImage}"
+                               Aspect="AspectFill" />
+                        <Grid IsVisible="{Binding HasNoImage}"
+                              BackgroundColor="#DDE7DA">
+                            <Label Text="Florence Feed"
+                                   TextColor="{StaticResource SageDark}"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Grid>
+                        <Border BackgroundColor="#EEF4EC"
+                                StrokeThickness="0"
+                                Padding="9,4"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Start"
+                                Margin="10">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <Label Text="{Binding TypeLabel}"
+                                   TextColor="{StaticResource SageDark}"
+                                   FontSize="10"
+                                   FontAttributes="Bold" />
+                        </Border>
+                    </Grid>
 
-                <Border BackgroundColor="#FFFFFF"
-                        Stroke="{StaticResource Line}"
-                        StrokeThickness="1"
-                        Padding="16,14">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="8" />
-                    </Border.StrokeShape>
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Dica rapida"
+                    <VerticalStackLayout Grid.Row="1"
+                                         Padding="14,10"
+                                         Spacing="5">
+                        <Label Text="{Binding Title}"
                                TextColor="{StaticResource SageDark}"
-                               FontSize="17"
-                               FontAttributes="Bold" />
-                        <Label Text="Use a aba Notas para organizar os protocolos em markdown e compartilhar seus resumos."
-                               TextColor="{StaticResource BodyText}"
-                               FontSize="14"
-                               LineBreakMode="WordWrap" />
-                        <Label Text="Notas · Markdown"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               LineBreakMode="WordWrap"
+                               MaxLines="2" />
+                        <Label Text="{Binding SourceLine}"
                                TextColor="{StaticResource SoftText}"
-                               FontSize="12" />
+                               FontSize="11" />
                     </VerticalStackLayout>
-                </Border>
-            </VerticalStackLayout>
-        </ScrollView>
+                </Grid>
+            </Border>
+
+            <RefreshView Grid.Row="3"
+                         IsRefreshing="{Binding IsRefreshing}"
+                         Command="{Binding RefreshCommand}"
+                         Margin="0,12,0,0">
+                <CollectionView ItemsSource="{Binding Posts}"
+                                SelectionMode="None">
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout Padding="0,40"
+                                             Spacing="10"
+                                             HorizontalOptions="Center">
+                            <ActivityIndicator IsRunning="True"
+                                               Color="{StaticResource Sage}" />
+                            <Label Text="Buscando conteudos..."
+                                   TextColor="{StaticResource SoftText}"
+                                   FontSize="13"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical"
+                                         Span="2"
+                                         HorizontalItemSpacing="10"
+                                         VerticalItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="services:HealthPost">
+                            <Border BackgroundColor="#FFFFFF"
+                                    Stroke="{StaticResource Line}"
+                                    StrokeThickness="1"
+                                    Padding="0">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPostTapped" />
+                                </Border.GestureRecognizers>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Grid RowDefinitions="74,*"
+                                      HeightRequest="184">
+                                    <Grid>
+                                        <Image Source="{Binding ImageUrl}"
+                                               IsVisible="{Binding HasImage}"
+                                               Aspect="AspectFill" />
+                                        <Grid IsVisible="{Binding HasNoImage}"
+                                              BackgroundColor="#EEF4EC">
+                                            <Label Text="{Binding TypeLabel}"
+                                                   TextColor="{StaticResource SageDark}"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                                        </Grid>
+                                    </Grid>
+                                    <VerticalStackLayout Grid.Row="1"
+                                                         Padding="10,9"
+                                                         Spacing="6">
+                                        <Label Text="{Binding Title}"
+                                               TextColor="{StaticResource BodyText}"
+                                               FontSize="13"
+                                               FontAttributes="Bold"
+                                               LineBreakMode="WordWrap"
+                                               MaxLines="3" />
+                                        <Label Text="{Binding SourceLine}"
+                                               TextColor="{StaticResource SoftText}"
+                                               FontSize="10"
+                                               LineBreakMode="TailTruncation" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
 
         <controls:BottomNavigationBar Grid.Row="1"
                                       ActiveTab="Home" />

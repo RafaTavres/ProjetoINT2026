@@ -129,11 +129,11 @@
                 </Border>
 
                 <Button Grid.Column="1"
-                        Text="Enviar"
+                        Text="➤"
                         Clicked="OnSendClicked"
                         BackgroundColor="{StaticResource Sage}"
                         TextColor="White"
-                        FontSize="12"
+                        FontSize="20"
                         FontAttributes="Bold"
                         CornerRadius="24"
                         Padding="0"

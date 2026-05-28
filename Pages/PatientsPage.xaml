@@ -22,17 +22,17 @@
         <Grid RowDefinitions="*,86">
             <Grid x:Name="PatientListView"
                   Grid.Row="0"
-                  RowDefinitions="84,58,*"
+                  RowDefinitions="92,58,*"
                   Padding="26,36,26,0">
                 <Grid ColumnDefinitions="*,52">
                     <VerticalStackLayout Spacing="0"
                                          VerticalOptions="Center">
-                        <Label Text="Pacientes"
+                        <Label Text="Plantao"
                                TextColor="{StaticResource OliveText}"
                                FontSize="36"
                                FontAttributes="Bold"
                                FontFamily="OpenSansSemibold" />
-                        <Label Text="Escolha um caso para treinar diagnosticos"
+                        <Label Text="Resolva casos clinicos e ganhe XP"
                                TextColor="{StaticResource SoftText}"
                                FontSize="12" />
                     </VerticalStackLayout>
@@ -44,6 +44,9 @@
                             WidthRequest="48"
                             HorizontalOptions="End"
                             VerticalOptions="Center">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnGenerateCaseTapped" />
+                        </Border.GestureRecognizers>
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="24" />
                         </Border.StrokeShape>
@@ -108,7 +111,7 @@
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="14" />
                                 </Border.StrokeShape>
-                                <Grid ColumnDefinitions="58,*,26"
+                                <Grid ColumnDefinitions="58,*,54"
                                       ColumnSpacing="14">
                                     <Grid HeightRequest="54"
                                           WidthRequest="54">
@@ -139,14 +142,33 @@
                                                TextColor="{StaticResource SoftText}"
                                                FontSize="12"
                                                LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding StatusLine}"
+                                               TextColor="{StaticResource OliveText}"
+                                               FontSize="11"
+                                               LineBreakMode="TailTruncation" />
                                     </VerticalStackLayout>
 
-                                    <Label Grid.Column="2"
-                                           Text=">"
-                                           TextColor="#6E746D"
-                                           FontSize="30"
-                                           HorizontalOptions="End"
-                                           VerticalOptions="Center" />
+                                    <VerticalStackLayout Grid.Column="2"
+                                                         Spacing="5"
+                                                         HorizontalOptions="End"
+                                                         VerticalOptions="Center">
+                                        <Border BackgroundColor="{StaticResource SagePale}"
+                                                StrokeThickness="0"
+                                                Padding="8,3">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <Label Text="{Binding Difficulty}"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="10"
+                                                   FontAttributes="Bold"
+                                                   HorizontalOptions="Center" />
+                                        </Border>
+                                        <Label Text="{Binding ScoreLine}"
+                                               TextColor="{StaticResource SoftText}"
+                                               FontSize="11"
+                                               HorizontalOptions="End" />
+                                    </VerticalStackLayout>
                                 </Grid>
                             </Border>
                         </DataTemplate>
@@ -157,7 +179,7 @@
             <Grid x:Name="PatientDetailView"
                   Grid.Row="0"
                   IsVisible="False"
-                  RowDefinitions="104,50,*"
+                  RowDefinitions="112,50,*"
                   Padding="22,34,22,0">
                 <Grid ColumnDefinitions="36,*,44"
                       RowDefinitions="38,54">
@@ -209,7 +231,8 @@
                                TextColor="{StaticResource BodyText}"
                                FontSize="14"
                                HorizontalOptions="Center" />
-                        <Label Text="Caso de treino clinico"
+                        <Label x:Name="CaseProgressLabel"
+                               Text="Caso de treino clinico"
                                TextColor="{StaticResource SoftText}"
                                FontSize="12"
                                HorizontalOptions="Center" />
@@ -285,6 +308,41 @@
                     <ScrollView x:Name="SummaryContent">
                         <VerticalStackLayout Spacing="12"
                                              Padding="0,0,0,18">
+                            <Border BackgroundColor="#EEF4EC"
+                                    Stroke="#DDE7DA"
+                                    StrokeThickness="1"
+                                    Padding="16,14">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Grid ColumnDefinitions="*,*"
+                                      RowDefinitions="Auto,Auto"
+                                      ColumnSpacing="12"
+                                      RowSpacing="6">
+                                    <Label Text="Desempenho"
+                                           TextColor="{StaticResource OliveText}"
+                                           FontSize="17"
+                                           FontAttributes="Bold" />
+                                    <Label x:Name="CaseScoreLabel"
+                                           Grid.Column="1"
+                                           TextColor="{StaticResource OliveText}"
+                                           FontSize="17"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="End" />
+                                    <Label x:Name="CaseActionStateLabel"
+                                           Grid.Row="1"
+                                           TextColor="{StaticResource BodyText}"
+                                           FontSize="13"
+                                           LineBreakMode="WordWrap" />
+                                    <Label x:Name="CaseRewardLabel"
+                                           Grid.Row="1"
+                                           Grid.Column="1"
+                                           TextColor="{StaticResource SoftText}"
+                                           FontSize="13"
+                                           HorizontalOptions="End" />
+                                </Grid>
+                            </Border>
+
                             <Border BackgroundColor="#FFFFFF"
                                     Stroke="{StaticResource Line}"
                                     StrokeThickness="1"
@@ -408,6 +466,16 @@
                            TextColor="{StaticResource OliveText}"
                            FontSize="20"
                            FontAttributes="Bold" />
+                    <Label Text="Escolha uma etapa. O caso pontua precisao, seguranca e eficiencia."
+                           TextColor="{StaticResource SoftText}"
+                           FontSize="12" />
+                    <Button Text="Solicitar exame"
+                            Clicked="OnExamClicked"
+                            BackgroundColor="#EEF4EC"
+                            TextColor="{StaticResource OliveText}"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            HeightRequest="44" />
                     <Button Text="Diagnosticar"
                             Clicked="OnDiagnoseClicked"
                             BackgroundColor="{StaticResource Sage}"
@@ -422,8 +490,8 @@
                             FontAttributes="Bold"
                             CornerRadius="10"
                             HeightRequest="44" />
-                    <Button Text="Solicitar exame"
-                            Clicked="OnExamClicked"
+                    <Button Text="Encerrar caso"
+                            Clicked="OnFinishCaseClicked"
                             BackgroundColor="#EEF4EC"
                             TextColor="{StaticResource OliveText}"
                             FontAttributes="Bold"
