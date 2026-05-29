@@ -29,11 +29,11 @@
                            FontSize="32"
                            FontAttributes="Bold"
                            FontFamily="OpenSansSemibold" />
-                    <Label Text="Conteudos variados para estudar enfermagem"
+                    <Label Text="Noticias e artigos para estudar enfermagem"
                            TextColor="{StaticResource SoftText}"
                            FontSize="13" />
                     <Label x:Name="FeedStatusLabel"
-                           Text="Atualizando feed..."
+                           Text="Carregando feed..."
                            TextColor="{StaticResource SoftText}"
                            FontSize="11" />
                 </VerticalStackLayout>
@@ -66,7 +66,7 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="10" />
                 </Border.StrokeShape>
-                <Grid RowDefinitions="112,*"
+                <Grid RowDefinitions="122,*"
                       x:DataType="services:HealthPost">
                     <Grid>
                         <Image Source="{Binding ImageUrl}"
@@ -149,8 +149,8 @@
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="8" />
                                 </Border.StrokeShape>
-                                <Grid RowDefinitions="74,*"
-                                      HeightRequest="184">
+                                <Grid RowDefinitions="88,*"
+                                      HeightRequest="198">
                                     <Grid>
                                         <Image Source="{Binding ImageUrl}"
                                                IsVisible="{Binding HasImage}"

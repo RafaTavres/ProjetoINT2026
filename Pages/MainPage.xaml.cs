@@ -8,6 +8,7 @@ namespace ProjetoINT2026.Pages;
 public partial class MainPage : ContentPage
 {
 	private readonly IHealthContentService healthContentService;
+	private bool isLoading;
 	private bool isRefreshing;
 	private HealthPost? featuredPost;
 
@@ -20,7 +21,7 @@ public partial class MainPage : ContentPage
 	{
 		InitializeComponent();
 		this.healthContentService = healthContentService;
-		RefreshCommand = new Command(async () => await LoadPostsAsync());
+		RefreshCommand = new Command(async () => await LoadPostsAsync(true));
 		BindingContext = this;
 	}
 
@@ -64,18 +65,25 @@ public partial class MainPage : ContentPage
 
 		if (Posts.Count == 0)
 		{
-			await LoadPostsAsync();
+			await LoadPostsAsync(false);
 		}
 	}
 
-	private async Task LoadPostsAsync()
+	private async Task LoadPostsAsync(bool forceRefresh)
 	{
+		if (isLoading)
+		{
+			IsRefreshing = false;
+			return;
+		}
+
+		isLoading = true;
 		IsRefreshing = true;
-		FeedStatusLabel.Text = "Atualizando feed...";
+		FeedStatusLabel.Text = forceRefresh ? "Buscando novos conteudos..." : "Carregando feed...";
 
 		try
 		{
-			var posts = await healthContentService.GetPostsAsync();
+			var posts = await healthContentService.GetPostsAsync(forceRefresh);
 			Posts.Clear();
 			FeaturedPost = posts.FirstOrDefault();
 
@@ -84,7 +92,7 @@ public partial class MainPage : ContentPage
 				Posts.Add(post);
 			}
 
-			FeedStatusLabel.Text = posts.Count > 0 ? "Toque em um card para abrir a fonte" : "Nenhum conteudo encontrado";
+			FeedStatusLabel.Text = posts.Count > 0 ? "Puxe para atualizar e ver outros conteudos" : "Nenhum conteudo encontrado";
 		}
 		catch
 		{
@@ -92,6 +100,7 @@ public partial class MainPage : ContentPage
 		}
 		finally
 		{
+			isLoading = false;
 			IsRefreshing = false;
 		}
 	}

@@ -22,7 +22,15 @@ public static class MauiProgram
 		{
 			Timeout = TimeSpan.FromSeconds(8)
 		});
+		builder.Services.AddSingleton(new ChatApiOptions
+		{
+			// MVP: chamada direta ao Gemini pelo app.
+			// Atenção: em app distribuido, essa chave pode ser extraida do APK.
+			ApiKey = "",
+			Model = "gemini-2.5-flash-lite"
+		});
 		builder.Services.AddSingleton<IHealthContentService, HealthContentService>();
+		builder.Services.AddSingleton<IChatResponder, GeminiChatResponder>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

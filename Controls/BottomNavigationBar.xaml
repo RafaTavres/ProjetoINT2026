@@ -55,7 +55,7 @@
                        HeightRequest="30"
                        WidthRequest="30" />
                 <Label x:Name="ChatLabel"
-                       Text="Chat IA"
+                       Text="Florence"
                        TextColor="#747A70"
                        FontSize="14"
                        HorizontalOptions="Center" />

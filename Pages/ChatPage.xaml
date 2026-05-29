@@ -19,23 +19,16 @@
     <Grid>
         <Grid RowDefinitions="*,86">
             <Grid Grid.Row="0"
-                  RowDefinitions="88,*,76"
+                  RowDefinitions="98,*,Auto"
                   Padding="24,34,24,0">
             <VerticalStackLayout Spacing="2"
                                  VerticalOptions="Center">
-                <HorizontalStackLayout Spacing="7">
-                    <Label Text="Chat"
-                           TextColor="{StaticResource SageDark}"
-                           FontSize="30"
-                           FontAttributes="Bold"
-                           FontFamily="OpenSansSemibold" />
-                    <Label Text="IA"
-                           TextColor="{StaticResource Sage}"
-                           FontSize="30"
-                           FontAttributes="Bold"
-                           FontFamily="OpenSansSemibold" />
-                </HorizontalStackLayout>
-                <Label Text="Assistente local para treinar fluxos de conversa"
+                <Label Text="Florence"
+                       TextColor="{StaticResource SageDark}"
+                       FontSize="32"
+                       FontAttributes="Bold"
+                       FontFamily="OpenSansSemibold" />
+                <Label Text="Converse com a Florence"
                        TextColor="{StaticResource SoftText}"
                        FontSize="13" />
             </VerticalStackLayout>
@@ -50,13 +43,14 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="pages:ChatMessage">
-                        <Grid ColumnDefinitions="*,*">
-                            <Border Grid.Column="{Binding Column}"
-                                    BackgroundColor="{Binding BubbleColor}"
+                        <Grid Padding="0,2">
+                            <Border BackgroundColor="{Binding BubbleColor}"
                                     Stroke="{StaticResource Line}"
                                     StrokeThickness="1"
-                                    Padding="14,10"
-                                    MaximumWidthRequest="260">
+                                    Padding="16,12"
+                                    MinimumWidthRequest="164"
+                                    MaximumWidthRequest="330"
+                                    HorizontalOptions="{Binding BubbleHorizontalOptions}">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnMessageTapped" />
                                 </Border.GestureRecognizers>
@@ -66,11 +60,11 @@
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="{Binding Sender}"
                                            TextColor="{Binding SenderColor}"
-                                           FontSize="11"
+                                           FontSize="12"
                                            FontAttributes="Bold" />
                                     <Label Text="{Binding Text}"
                                            TextColor="{Binding TextColor}"
-                                           FontSize="14"
+                                           FontSize="15"
                                            LineBreakMode="WordWrap" />
                                     <Border IsVisible="{Binding ShowSaveAsNote}"
                                             BackgroundColor="#EEF4EC"
@@ -107,10 +101,67 @@
             </CollectionView>
 
             <Grid Grid.Row="2"
-                  ColumnDefinitions="*,54"
-                  ColumnSpacing="10"
-                  Padding="0,12,0,10">
-                <Border BackgroundColor="#FFFFFF"
+                  RowDefinitions="Auto,54"
+                  ColumnDefinitions="46,*,54"
+                  ColumnSpacing="8"
+                  RowSpacing="8"
+                  Padding="0,4,0,10">
+                <Border x:Name="AttachmentChip"
+                        Grid.ColumnSpan="3"
+                        IsVisible="False"
+                        BackgroundColor="#EEF4EC"
+                        Stroke="#DDE7DA"
+                        StrokeThickness="1"
+                        Padding="12,0"
+                        HeightRequest="34">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="17" />
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="*,30">
+                        <Label x:Name="AttachmentLabel"
+                               TextColor="{StaticResource SageDark}"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"
+                               LineBreakMode="TailTruncation" />
+                        <Label Grid.Column="1"
+                               Text="x"
+                               TextColor="{StaticResource SoftText}"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnRemoveAttachmentTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1"
+                        BackgroundColor="#FFFFFF"
+                        Stroke="{StaticResource Line}"
+                        StrokeThickness="1"
+                        HeightRequest="48"
+                        WidthRequest="46">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAttachFileTapped" />
+                    </Border.GestureRecognizers>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="23" />
+                    </Border.StrokeShape>
+                    <Label Text="+"
+                           TextColor="{StaticResource SageDark}"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Margin="0,-2,0,0" />
+                </Border>
+
+                <Border Grid.Row="1"
+                        Grid.Column="1"
+                        BackgroundColor="#FFFFFF"
                         Stroke="{StaticResource Line}"
                         StrokeThickness="1"
                         Padding="16,0">
@@ -118,17 +169,18 @@
                         <RoundRectangle CornerRadius="24" />
                     </Border.StrokeShape>
                     <Entry x:Name="MessageEntry"
-                           Placeholder="Digite sua mensagem..."
+                           Placeholder="Mensagem para Florence..."
                            PlaceholderColor="{StaticResource SoftText}"
                            TextColor="{StaticResource BodyText}"
-                           FontSize="14"
+                           FontSize="15"
                            BackgroundColor="Transparent"
                            ReturnType="Send"
                            Completed="OnMessageCompleted"
                            VerticalOptions="Center" />
                 </Border>
 
-                <Button Grid.Column="1"
+                <Button Grid.Row="1"
+                        Grid.Column="2"
                         Text="➤"
                         Clicked="OnSendClicked"
                         BackgroundColor="{StaticResource Sage}"

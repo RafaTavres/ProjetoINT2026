@@ -1,22 +1,31 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.DependencyInjection;
+using ProjetoINT2026.Services;
 
 namespace ProjetoINT2026.Pages;
 
 public partial class ChatPage : ContentPage
 {
 	private const string DefaultAiNotesFolder = "Anotacoes IA";
-	private readonly IChatResponder chatResponder = new EchoChatResponder();
+	private readonly IChatResponder chatResponder;
+	private ChatAttachment? pendingAttachment;
 	private string? pendingNoteResponse;
 	private string selectedSaveFolderName = DefaultAiNotesFolder;
 
 	public ChatPage()
+		: this(MauiProgram.Services.GetRequiredService<IChatResponder>())
+	{
+	}
+
+	public ChatPage(IChatResponder chatResponder)
 	{
 		InitializeComponent();
+		this.chatResponder = chatResponder;
 		BindingContext = this;
 
-		Messages.Add(ChatMessage.FromAssistant("Ola! Envie uma mensagem para testar o fluxo do chat."));
+		LoadSavedMessages();
 	}
 
 	public ObservableCollection<ChatMessage> Messages { get; } = [];
@@ -36,18 +45,117 @@ public partial class ChatPage : ContentPage
 	private async Task SendCurrentMessageAsync()
 	{
 		var text = MessageEntry.Text?.Trim();
-		if (string.IsNullOrWhiteSpace(text))
+		if (string.IsNullOrWhiteSpace(text) && pendingAttachment is null)
 		{
 			return;
 		}
 
+		var historyBeforeMessage = GetHistorySnapshot();
+		var messageForUser = BuildUserMessageText(text, pendingAttachment);
+		var messageForAi = BuildAiMessageText(text, pendingAttachment);
+
 		MessageEntry.Text = string.Empty;
-		Messages.Add(ChatMessage.FromUser(text));
+		ClearAttachment();
+		Messages.Add(ChatMessage.FromUser(messageForUser));
+		SaveMessages();
 		await ScrollToLatestMessageAsync();
 
-		var response = await chatResponder.GetResponseAsync(text);
+		var response = await chatResponder.GetResponseAsync(messageForAi, historyBeforeMessage);
 		Messages.Add(ChatMessage.FromAssistant(response));
+		SaveMessages();
 		await ScrollToLatestMessageAsync();
+	}
+
+	private static string BuildUserMessageText(string? text, ChatAttachment? attachment)
+	{
+		var message = string.IsNullOrWhiteSpace(text) ? "Analise o arquivo anexado." : text.Trim();
+		return attachment is null ? message : $"{message}\n\nArquivo: {attachment.FileName}";
+	}
+
+	private static string BuildAiMessageText(string? text, ChatAttachment? attachment)
+	{
+		var message = string.IsNullOrWhiteSpace(text)
+			? "Analise o arquivo anexado e destaque os pontos uteis para enfermagem."
+			: text.Trim();
+
+		if (attachment is null)
+		{
+			return message;
+		}
+
+		return $"""
+		{message}
+
+		Arquivo anexado:
+		Nome: {attachment.FileName}
+		Tipo: {attachment.ContentType}
+		Conteudo extraido:
+		{attachment.TextPreview}
+		""";
+	}
+
+	private void LoadSavedMessages()
+	{
+		var savedMessages = ChatSessionStore.Load();
+		if (savedMessages.Count == 0)
+		{
+			Messages.Add(ChatMessage.FromAssistant("Ola! Sou a Florence. Me diga sua duvida de enfermagem que eu te ajudo de forma objetiva."));
+			SaveMessages();
+			return;
+		}
+
+		foreach (var message in savedMessages)
+		{
+			Messages.Add(message.IsUser ? ChatMessage.FromUser(message.Text) : ChatMessage.FromAssistant(message.Text));
+		}
+	}
+
+	private IReadOnlyList<ChatHistoryItem> GetHistorySnapshot()
+	{
+		return Messages
+			.Select(message => new ChatHistoryItem(message.IsUser, message.Text))
+			.ToList();
+	}
+
+	private void SaveMessages()
+	{
+		ChatSessionStore.Save(GetHistorySnapshot());
+	}
+
+	private async void OnAttachFileTapped(object sender, TappedEventArgs e)
+	{
+		try
+		{
+			var file = await FilePicker.Default.PickAsync(new PickOptions
+			{
+				PickerTitle = "Escolha um arquivo para enviar"
+			});
+
+			if (file is null)
+			{
+				return;
+			}
+
+			pendingAttachment = await ChatAttachment.FromFileAsync(file);
+			AttachmentLabel.Text = pendingAttachment.FileName;
+			AttachmentChip.IsVisible = true;
+		}
+		catch
+		{
+			await DisplayAlert("Arquivo", "Nao foi possivel anexar esse arquivo.", "OK");
+		}
+	}
+
+	private void OnRemoveAttachmentTapped(object sender, TappedEventArgs e)
+	{
+		ClearAttachment();
+	}
+
+	private void ClearAttachment()
+	{
+		pendingAttachment = null;
+		AttachmentLabel.Text = string.Empty;
+		AttachmentChip.IsVisible = false;
 	}
 
 	private async Task ScrollToLatestMessageAsync()
@@ -133,16 +241,43 @@ public partial class ChatPage : ContentPage
 	}
 }
 
-public interface IChatResponder
+public sealed class ChatAttachment
 {
-	Task<string> GetResponseAsync(string message);
-}
+	private static readonly string[] TextExtensions = [".txt", ".md", ".csv", ".json", ".xml", ".xaml", ".cs", ".log"];
 
-public sealed class EchoChatResponder : IChatResponder
-{
-	public Task<string> GetResponseAsync(string message)
+	private ChatAttachment(string fileName, string contentType, string textPreview)
 	{
-		return Task.FromResult(message);
+		FileName = fileName;
+		ContentType = string.IsNullOrWhiteSpace(contentType) ? "arquivo" : contentType;
+		TextPreview = textPreview;
+	}
+
+	public string FileName { get; }
+
+	public string ContentType { get; }
+
+	public string TextPreview { get; }
+
+	public static async Task<ChatAttachment> FromFileAsync(FileResult file)
+	{
+		var extension = Path.GetExtension(file.FileName);
+		if (!TextExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
+		{
+			return new ChatAttachment(file.FileName, file.ContentType, "Nao foi possivel ler o conteudo desse tipo de arquivo no MVP. Use a pergunta do usuario e o nome do arquivo como contexto.");
+		}
+
+		try
+		{
+			await using var stream = await file.OpenReadAsync();
+			using var reader = new StreamReader(stream);
+			var content = await reader.ReadToEndAsync();
+			var preview = content.Length > 5000 ? $"{content[..5000]}\n\n[conteudo cortado]" : content;
+			return new ChatAttachment(file.FileName, file.ContentType, preview);
+		}
+		catch
+		{
+			return new ChatAttachment(file.FileName, file.ContentType, "Nao foi possivel ler o conteudo do arquivo.");
+		}
 	}
 }
 
@@ -154,6 +289,7 @@ public sealed class ChatMessage : INotifyPropertyChanged
 	{
 		Sender = sender;
 		Text = text;
+		IsUser = isUser;
 		CanSaveAsNote = !isUser;
 		Column = isUser ? 1 : 0;
 		BubbleColor = isUser ? Color.FromArgb("#AFC0A3") : Colors.White;
@@ -166,6 +302,8 @@ public sealed class ChatMessage : INotifyPropertyChanged
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public string Text { get; }
+
+	public bool IsUser { get; }
 
 	public bool CanSaveAsNote { get; }
 
@@ -194,6 +332,8 @@ public sealed class ChatMessage : INotifyPropertyChanged
 	public Color TextColor { get; }
 
 	public Color SenderColor { get; }
+
+	public LayoutOptions BubbleHorizontalOptions => IsUser ? LayoutOptions.End : LayoutOptions.Start;
 
 	public static ChatMessage FromUser(string text)
 	{
