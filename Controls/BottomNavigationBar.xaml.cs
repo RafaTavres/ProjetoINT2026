@@ -2,7 +2,9 @@ namespace ProjetoINT2026.Controls;
 
 public partial class BottomNavigationBar : ContentView
 {
-	private const string ActiveColor = "#B2BFA2";
+	private const string ActiveColor = "#536B50";
+	private const string ActivePillColor = "#EEF4EC";
+	private const string TransparentColor = "#00FFFFFF";
 	private const string MutedColor = "#747A70";
 
 	public static readonly BindableProperty ActiveTabProperty = BindableProperty.Create(
@@ -31,13 +33,19 @@ public partial class BottomNavigationBar : ContentView
 
 	private void UpdateActiveTab()
 	{
-		var active = Color.FromArgb(ActiveColor);
-		var muted = Color.FromArgb(MutedColor);
+		ApplyTabState(PatientsPill, PatientsIcon, PatientsLabel, ActiveTab == "Patients");
+		ApplyTabState(HomePill, HomeIcon, HomeLabel, ActiveTab == "Home");
+		ApplyTabState(ChatPill, ChatIcon, ChatLabel, ActiveTab == "Chat");
+		ApplyTabState(NotesPill, NotesIcon, NotesLabel, ActiveTab == "Notes");
+	}
 
-		PatientsLabel.TextColor = ActiveTab == "Patients" ? active : muted;
-		HomeLabel.TextColor = ActiveTab == "Home" ? active : muted;
-		ChatLabel.TextColor = ActiveTab == "Chat" ? active : muted;
-		NotesLabel.TextColor = ActiveTab == "Notes" ? active : muted;
+	private static void ApplyTabState(Border pill, Image icon, Label label, bool isActive)
+	{
+		pill.BackgroundColor = Color.FromArgb(isActive ? ActivePillColor : TransparentColor);
+		icon.Opacity = isActive ? 1 : 0.72;
+		icon.Scale = isActive ? 1.05 : 1;
+		label.TextColor = Color.FromArgb(isActive ? ActiveColor : MutedColor);
+		label.FontAttributes = isActive ? FontAttributes.Bold : FontAttributes.None;
 	}
 
 	private async void OnPatientsTapped(object sender, TappedEventArgs e)

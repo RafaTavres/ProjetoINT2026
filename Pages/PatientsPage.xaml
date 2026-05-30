@@ -19,43 +19,60 @@
     </ContentPage.Resources>
 
     <Grid>
-        <Grid RowDefinitions="*,86">
+        <Grid RowDefinitions="*,88">
             <Grid x:Name="PatientListView"
                   Grid.Row="0"
-                  RowDefinitions="92,58,*"
+                  RowDefinitions="148,56,*"
                   Padding="26,36,26,0">
-                <Grid ColumnDefinitions="*,52">
-                    <VerticalStackLayout Spacing="0"
-                                         VerticalOptions="Center">
-                        <Label Text="Plantao"
+                <Grid RowDefinitions="Auto,*">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Plantão"
                                TextColor="{StaticResource OliveText}"
                                FontSize="36"
                                FontAttributes="Bold"
                                FontFamily="OpenSansSemibold" />
-                        <Label Text="Resolva casos clinicos e ganhe XP"
+                        <Label Text="Escolha um caso, tome decisões e revise sua nota"
                                TextColor="{StaticResource SoftText}"
                                FontSize="12" />
                     </VerticalStackLayout>
 
-                    <Border Grid.Column="1"
-                            BackgroundColor="{StaticResource Sage}"
-                            StrokeThickness="0"
-                            HeightRequest="48"
-                            WidthRequest="48"
-                            HorizontalOptions="End"
-                            VerticalOptions="Center">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnGenerateCaseTapped" />
-                        </Border.GestureRecognizers>
+                    <Border Grid.Row="1"
+                            BackgroundColor="#EEF4EC"
+                            Stroke="#DDE7DA"
+                            StrokeThickness="1"
+                            Padding="14,10"
+                            VerticalOptions="End">
                         <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="24" />
+                            <RoundRectangle CornerRadius="16" />
                         </Border.StrokeShape>
-                        <Label Text="+"
-                               TextColor="White"
-                               FontSize="34"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center"
-                               Margin="0,-4,0,0" />
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="12">
+                            <VerticalStackLayout Spacing="2"
+                                                 VerticalOptions="Center">
+                                <Label Text="Missão do plantão"
+                                       TextColor="{StaticResource OliveText}"
+                                       FontSize="14"
+                                       FontAttributes="Bold" />
+                                <Label Text="Investigue, diagnostique e finalize para ganhar XP"
+                                       TextColor="{StaticResource SoftText}"
+                                       FontSize="11"
+                                       LineBreakMode="TailTruncation" />
+                            </VerticalStackLayout>
+                            <Border Grid.Column="1"
+                                    BackgroundColor="#FFFFFF"
+                                    Stroke="{StaticResource SageSoft}"
+                                    StrokeThickness="1"
+                                    Padding="10,5"
+                                    VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
+                                <Label Text="4 casos"
+                                       TextColor="{StaticResource OliveText}"
+                                       FontSize="12"
+                                       FontAttributes="Bold" />
+                            </Border>
+                        </Grid>
                     </Border>
                 </Grid>
 
@@ -75,7 +92,7 @@
                                WidthRequest="20"
                                VerticalOptions="Center" />
                         <Entry Grid.Column="1"
-                               Placeholder="Buscar paciente..."
+                               Placeholder="Buscar caso..."
                                PlaceholderColor="{StaticResource SoftText}"
                                TextColor="{StaticResource BodyText}"
                                FontSize="15"
@@ -88,15 +105,19 @@
                 <CollectionView Grid.Row="2"
                                 ItemsSource="{Binding Patients}"
                                 SelectionMode="None"
-                                Margin="0,14,0,0">
+                                Margin="0,14,0,12">
+                    <CollectionView.Footer>
+                        <BoxView HeightRequest="18"
+                                 Color="Transparent" />
+                    </CollectionView.Footer>
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Vertical"
                                            ItemSpacing="14" />
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="pages:PatientCase">
-                            <Border BackgroundColor="#FFFFFF"
-                                    Stroke="{StaticResource Line}"
+                            <Border BackgroundColor="{Binding CardBackgroundColor}"
+                                    Stroke="{Binding CardStrokeColor}"
                                     StrokeThickness="1"
                                     Padding="16,14">
                                 <Border.GestureRecognizers>
@@ -111,24 +132,25 @@
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="14" />
                                 </Border.StrokeShape>
-                                <Grid ColumnDefinitions="58,*,54"
-                                      ColumnSpacing="14">
-                                    <Grid HeightRequest="54"
-                                          WidthRequest="54">
-                                        <Ellipse Fill="{StaticResource SagePale}" />
-                                        <Ellipse Fill="{StaticResource Sage}"
-                                                 HeightRequest="21"
-                                                 WidthRequest="21"
-                                                 HorizontalOptions="Center"
-                                                 VerticalOptions="Start"
-                                                 Margin="0,9,0,0" />
-                                        <Ellipse Fill="{StaticResource Sage}"
-                                                 HeightRequest="31"
-                                                 WidthRequest="40"
-                                                 HorizontalOptions="Center"
-                                                 VerticalOptions="End"
-                                                 Margin="0,0,0,6" />
-                                    </Grid>
+                                <Grid RowDefinitions="Auto,Auto"
+                                      RowSpacing="12">
+                                    <Grid ColumnDefinitions="58,*,82"
+                                          ColumnSpacing="14">
+                                    <Border BackgroundColor="{Binding CaseIconBackgroundColor}"
+                                            StrokeThickness="0"
+                                            HeightRequest="54"
+                                            WidthRequest="54"
+                                            VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="27" />
+                                        </Border.StrokeShape>
+                                        <Label Text="{Binding CaseIconText}"
+                                               TextColor="{Binding CaseIconTextColor}"
+                                               FontSize="12"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                    </Border>
 
                                     <VerticalStackLayout Grid.Column="1"
                                                          Spacing="2"
@@ -152,14 +174,14 @@
                                                          Spacing="5"
                                                          HorizontalOptions="End"
                                                          VerticalOptions="Center">
-                                        <Border BackgroundColor="{StaticResource SagePale}"
+                                        <Border BackgroundColor="{Binding DifficultyBackgroundColor}"
                                                 StrokeThickness="0"
                                                 Padding="8,3">
                                             <Border.StrokeShape>
                                                 <RoundRectangle CornerRadius="10" />
                                             </Border.StrokeShape>
                                             <Label Text="{Binding Difficulty}"
-                                                   TextColor="{StaticResource OliveText}"
+                                                   TextColor="{Binding DifficultyTextColor}"
                                                    FontSize="10"
                                                    FontAttributes="Bold"
                                                    HorizontalOptions="Center" />
@@ -168,7 +190,36 @@
                                                TextColor="{StaticResource SoftText}"
                                                FontSize="11"
                                                HorizontalOptions="End" />
+                                        <Border BackgroundColor="{Binding ActionBadgeBackgroundColor}"
+                                                StrokeThickness="0"
+                                                Padding="9,4"
+                                                HorizontalOptions="End">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="11" />
+                                            </Border.StrokeShape>
+                                            <Label Text="{Binding ListActionLabel}"
+                                                   TextColor="{Binding StatusTextColor}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   HorizontalOptions="End" />
+                                        </Border>
                                     </VerticalStackLayout>
+                                    </Grid>
+
+                                    <Grid Grid.Row="1"
+                                          ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="10">
+                                        <ProgressBar Progress="{Binding ProgressValue}"
+                                                     ProgressColor="{Binding CaseProgressColor}"
+                                                     BackgroundColor="#E8EEE5"
+                                                     HeightRequest="7"
+                                                     VerticalOptions="Center" />
+                                        <Label Grid.Column="1"
+                                               Text="{Binding StepSummary}"
+                                               TextColor="{StaticResource SoftText}"
+                                               FontSize="11"
+                                               VerticalOptions="Center" />
+                                    </Grid>
                                 </Grid>
                             </Border>
                         </DataTemplate>
@@ -179,64 +230,88 @@
             <Grid x:Name="PatientDetailView"
                   Grid.Row="0"
                   IsVisible="False"
-                  RowDefinitions="112,50,*"
-                  Padding="22,34,22,0">
-                <Grid ColumnDefinitions="36,*,44"
-                      RowDefinitions="38,54">
-                    <Label Text="&lt;"
-                           TextColor="{StaticResource Sage}"
-                           FontSize="30"
-                           VerticalOptions="Center">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnBackToPatientsTapped" />
-                        </Label.GestureRecognizers>
-                    </Label>
-
-                    <Label x:Name="PatientNameLabel"
-                           Grid.Column="1"
-                           TextColor="{StaticResource BodyText}"
-                           FontSize="26"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           LineBreakMode="TailTruncation" />
-
-                    <Border Grid.Column="2"
-                            BackgroundColor="{StaticResource Sage}"
-                            StrokeThickness="0"
+                  RowDefinitions="104,50,*"
+                  Padding="18,30,18,0">
+                <Grid ColumnDefinitions="42,50,*,Auto"
+                      ColumnSpacing="12"
+                      Padding="0,4,0,0">
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="{StaticResource Line}"
+                            StrokeThickness="1"
                             HeightRequest="40"
                             WidthRequest="40"
-                            HorizontalOptions="End"
+                            HorizontalOptions="Start"
                             VerticalOptions="Center">
                         <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnActionsTapped" />
+                            <TapGestureRecognizer Tapped="OnBackToPatientsTapped" />
                         </Border.GestureRecognizers>
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20" />
                         </Border.StrokeShape>
-                        <Label Text="+"
-                               TextColor="White"
-                               FontSize="30"
+                        <Image Source="icon_back.svg"
+                               HeightRequest="22"
+                               WidthRequest="22"
                                HorizontalOptions="Center"
-                               VerticalOptions="Center"
-                               Margin="0,-4,0,0" />
+                               VerticalOptions="Center" />
                     </Border>
 
-                    <VerticalStackLayout Grid.Row="1"
-                                         Grid.ColumnSpan="3"
-                                         Spacing="2"
-                                         HorizontalOptions="Center"
+                    <Grid Grid.Column="1"
+                          HeightRequest="48"
+                          WidthRequest="48"
+                          VerticalOptions="Center">
+                        <Ellipse Fill="{StaticResource SagePale}" />
+                        <Ellipse Fill="{StaticResource Sage}"
+                                 HeightRequest="18"
+                                 WidthRequest="18"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Start"
+                                 Margin="0,8,0,0" />
+                        <Ellipse Fill="{StaticResource Sage}"
+                                 HeightRequest="27"
+                                 WidthRequest="35"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="End"
+                                 Margin="0,0,0,6" />
+                    </Grid>
+
+                    <VerticalStackLayout Grid.Column="2"
+                                         Spacing="1"
                                          VerticalOptions="Center">
+                        <Label Text="Caso clinico"
+                               TextColor="{StaticResource OliveText}"
+                               FontSize="11"
+                               FontAttributes="Bold" />
+                        <Label x:Name="PatientNameLabel"
+                               TextColor="{StaticResource BodyText}"
+                               FontSize="24"
+                               FontAttributes="Bold"
+                               LineBreakMode="TailTruncation" />
                         <Label x:Name="PatientMetaLabel"
                                TextColor="{StaticResource BodyText}"
-                               FontSize="14"
-                               HorizontalOptions="Center" />
+                               FontSize="12"
+                               LineBreakMode="TailTruncation" />
                         <Label x:Name="CaseProgressLabel"
                                Text="Caso de treino clinico"
                                TextColor="{StaticResource SoftText}"
-                               FontSize="12"
-                               HorizontalOptions="Center" />
+                               FontSize="11"
+                               LineBreakMode="TailTruncation" />
                     </VerticalStackLayout>
+
+                    <Border Grid.Column="3"
+                            BackgroundColor="#EEF4EC"
+                            Stroke="{StaticResource SageSoft}"
+                            StrokeThickness="1"
+                            Padding="10,5"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14" />
+                        </Border.StrokeShape>
+                        <Label x:Name="HeaderStatusLabel"
+                               TextColor="{StaticResource OliveText}"
+                               FontSize="11"
+                               FontAttributes="Bold" />
+                    </Border>
                 </Grid>
 
                 <Grid Grid.Row="1"
@@ -291,7 +366,7 @@
                         <VerticalStackLayout Spacing="6"
                                              VerticalOptions="Center">
                             <Label x:Name="NotesTabLabel"
-                                   Text="Anotacoes"
+                                   Text="Anotações"
                                    FontSize="15"
                                    HorizontalOptions="Center" />
                             <BoxView x:Name="NotesTabLine"
@@ -307,58 +382,180 @@
                       Margin="0,12,0,0">
                     <ScrollView x:Name="SummaryContent">
                         <VerticalStackLayout Spacing="12"
-                                             Padding="0,0,0,18">
+                                             Padding="0,0,0,92">
                             <Border BackgroundColor="#EEF4EC"
                                     Stroke="#DDE7DA"
                                     StrokeThickness="1"
+                                    Padding="18,16">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="18" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="12">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Spacing="1">
+                                            <Label Text="Missão do caso"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="18"
+                                                   FontAttributes="Bold" />
+                                            <Label Text="Complete as etapas para desbloquear a revisão final"
+                                                   TextColor="{StaticResource SoftText}"
+                                                   FontSize="11" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1"
+                                                             Spacing="0"
+                                                             HorizontalOptions="End">
+                                            <Label x:Name="CaseScoreLabel"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="20"
+                                                   FontAttributes="Bold"
+                                                   HorizontalOptions="End" />
+                                            <Label x:Name="CaseRewardLabel"
+                                                   TextColor="{StaticResource SoftText}"
+                                                   FontSize="11"
+                                                   HorizontalOptions="End" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <ProgressBar x:Name="CaseProgressBar"
+                                                 ProgressColor="{StaticResource Sage}"
+                                                 BackgroundColor="#DDE7DA"
+                                                 HeightRequest="8" />
+
+                                    <Grid RowDefinitions="Auto,Auto"
+                                          ColumnDefinitions="*,*,*"
+                                          ColumnSpacing="8"
+                                          RowSpacing="6">
+                                        <Border x:Name="ExamStepChip"
+                                                BackgroundColor="#FFFFFF"
+                                                Stroke="#DDE7DA"
+                                                StrokeThickness="1"
+                                                Padding="8,7">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="14" />
+                                            </Border.StrokeShape>
+                                            <HorizontalStackLayout Spacing="6"
+                                                                   HorizontalOptions="Center">
+                                                <Label x:Name="ExamStepLabel"
+                                                       Text="1"
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       VerticalOptions="Center" />
+                                                <Label Text="Exame"
+                                                       TextColor="{StaticResource SoftText}"
+                                                       FontSize="11"
+                                                       VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
+                                        </Border>
+
+                                        <Border x:Name="DiagnosisStepChip"
+                                                Grid.Column="1"
+                                                BackgroundColor="#FFFFFF"
+                                                Stroke="#DDE7DA"
+                                                StrokeThickness="1"
+                                                Padding="8,7">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="14" />
+                                            </Border.StrokeShape>
+                                            <HorizontalStackLayout Spacing="6"
+                                                                   HorizontalOptions="Center">
+                                                <Label x:Name="DiagnosisStepLabel"
+                                                       Text="2"
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       VerticalOptions="Center" />
+                                                <Label Text="Hipótese"
+                                                       TextColor="{StaticResource SoftText}"
+                                                       FontSize="11"
+                                                       VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
+                                        </Border>
+
+                                        <Border x:Name="TreatmentStepChip"
+                                                Grid.Column="2"
+                                                BackgroundColor="#FFFFFF"
+                                                Stroke="#DDE7DA"
+                                                StrokeThickness="1"
+                                                Padding="8,7">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="14" />
+                                            </Border.StrokeShape>
+                                            <HorizontalStackLayout Spacing="6"
+                                                                   HorizontalOptions="Center">
+                                                <Label x:Name="TreatmentStepLabel"
+                                                       Text="3"
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       VerticalOptions="Center" />
+                                                <Label Text="Conduta"
+                                                       TextColor="{StaticResource SoftText}"
+                                                       FontSize="11"
+                                                       VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                    </Grid>
+
+                                    <Border BackgroundColor="#FFFFFF"
+                                            Stroke="{StaticResource SageSoft}"
+                                            StrokeThickness="1"
+                                            Padding="12,9">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="14" />
+                                        </Border.StrokeShape>
+                                        <Grid ColumnDefinitions="*,Auto"
+                                              ColumnSpacing="10">
+                                            <Label x:Name="CaseActionStateLabel"
+                                                   TextColor="{StaticResource BodyText}"
+                                                   FontSize="12"
+                                                   LineBreakMode="WordWrap" />
+                                            <Label Text="XP ao encerrar"
+                                                   Grid.Column="1"
+                                                   TextColor="{StaticResource SoftText}"
+                                                   FontSize="11"
+                                                   VerticalOptions="Center" />
+                                        </Grid>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border x:Name="FinalReportCard"
+                                    IsVisible="False"
+                                    BackgroundColor="#FFFFFF"
+                                    Stroke="{StaticResource Sage}"
+                                    StrokeThickness="1"
                                     Padding="16,14">
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12" />
+                                    <RoundRectangle CornerRadius="18" />
                                 </Border.StrokeShape>
-                                <Grid ColumnDefinitions="*,*"
-                                      RowDefinitions="Auto,Auto"
-                                      ColumnSpacing="12"
-                                      RowSpacing="6">
-                                    <Label Text="Desempenho"
-                                           TextColor="{StaticResource OliveText}"
-                                           FontSize="17"
-                                           FontAttributes="Bold" />
-                                    <Label x:Name="CaseScoreLabel"
-                                           Grid.Column="1"
-                                           TextColor="{StaticResource OliveText}"
-                                           FontSize="17"
-                                           FontAttributes="Bold"
-                                           HorizontalOptions="End" />
-                                    <Label x:Name="CaseActionStateLabel"
-                                           Grid.Row="1"
+                                <VerticalStackLayout Spacing="9">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Spacing="1">
+                                            <Label Text="Resultado final"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="18"
+                                                   FontAttributes="Bold" />
+                                            <Label Text="Caso bloqueado para revisão"
+                                                   TextColor="{StaticResource SoftText}"
+                                                   FontSize="11" />
+                                        </VerticalStackLayout>
+                                        <Border Grid.Column="1"
+                                                BackgroundColor="#EEF4EC"
+                                                Stroke="{StaticResource SageSoft}"
+                                                StrokeThickness="1"
+                                                Padding="12,6">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="16" />
+                                            </Border.StrokeShape>
+                                            <Label x:Name="FinalGradeLabel"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   VerticalOptions="Center" />
+                                        </Border>
+                                    </Grid>
+                                    <Label x:Name="FinalReportLabel"
                                            TextColor="{StaticResource BodyText}"
                                            FontSize="13"
                                            LineBreakMode="WordWrap" />
-                                    <Label x:Name="CaseRewardLabel"
-                                           Grid.Row="1"
-                                           Grid.Column="1"
-                                           TextColor="{StaticResource SoftText}"
-                                           FontSize="13"
-                                           HorizontalOptions="End" />
-                                </Grid>
-                            </Border>
-
-                            <Border BackgroundColor="#FFFFFF"
-                                    Stroke="{StaticResource Line}"
-                                    StrokeThickness="1"
-                                    Padding="16,14">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12" />
-                                </Border.StrokeShape>
-                                <VerticalStackLayout Spacing="8">
-                                    <Label Text="Sinais vitais"
-                                           TextColor="{StaticResource BodyText}"
-                                           FontSize="17"
-                                           FontAttributes="Bold" />
-                                    <Label x:Name="VitalsLabel"
-                                           TextColor="{StaticResource BodyText}"
-                                           FontSize="14"
-                                           LineBreakMode="WordWrap" />
                                 </VerticalStackLayout>
                             </Border>
 
@@ -367,16 +564,69 @@
                                     StrokeThickness="1"
                                     Padding="16,14">
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12" />
+                                    <RoundRectangle CornerRadius="18" />
                                 </Border.StrokeShape>
-                                <VerticalStackLayout Spacing="8">
-                                    <Label Text="Queixa principal"
-                                           TextColor="{StaticResource BodyText}"
-                                           FontSize="17"
-                                           FontAttributes="Bold" />
-                                    <Label x:Name="ComplaintLabel"
-                                           TextColor="{StaticResource BodyText}"
-                                           FontSize="14" />
+                                <VerticalStackLayout Spacing="12">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Text="Pistas clínicas"
+                                               TextColor="{StaticResource OliveText}"
+                                               FontSize="17"
+                                               FontAttributes="Bold" />
+                                        <Label Text="leia antes de agir"
+                                               Grid.Column="1"
+                                               TextColor="{StaticResource SoftText}"
+                                               FontSize="11"
+                                               VerticalOptions="Center" />
+                                    </Grid>
+                                    <Grid ColumnDefinitions="*,*"
+                                          RowDefinitions="Auto,Auto,Auto"
+                                          ColumnSpacing="12"
+                                          RowSpacing="12">
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="Queixa"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold" />
+                                            <Label x:Name="ComplaintLabel"
+                                                   TextColor="{StaticResource BodyText}"
+                                                   FontSize="14"
+                                                   LineBreakMode="WordWrap" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1"
+                                                             Spacing="5">
+                                            <Label Text="Sinais vitais"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold" />
+                                            <Label x:Name="VitalsLabel"
+                                                   TextColor="{StaticResource BodyText}"
+                                                   FontSize="13"
+                                                   LineBreakMode="WordWrap" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Row="1"
+                                                             Spacing="5">
+                                            <Label Text="Cuidados iniciais"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold" />
+                                            <Label x:Name="InitialCareLabel"
+                                                   TextColor="{StaticResource BodyText}"
+                                                   FontSize="13"
+                                                   LineBreakMode="WordWrap" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Row="1"
+                                                             Grid.Column="1"
+                                                             Spacing="5">
+                                            <Label Text="Alergias"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold" />
+                                            <Label x:Name="AllergiesLabel"
+                                                   TextColor="{StaticResource BodyText}"
+                                                   FontSize="13"
+                                                   LineBreakMode="WordWrap" />
+                                        </VerticalStackLayout>
+                                    </Grid>
                                 </VerticalStackLayout>
                             </Border>
 
@@ -385,16 +635,37 @@
                                     StrokeThickness="1"
                                     Padding="16,14">
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12" />
+                                    <RoundRectangle CornerRadius="18" />
                                 </Border.StrokeShape>
-                                <VerticalStackLayout Spacing="8">
-                                    <Label Text="Diagnostico"
+                                <VerticalStackLayout Spacing="12">
+                                    <Label Text="Sua decisão"
                                            TextColor="{StaticResource BodyText}"
                                            FontSize="17"
                                            FontAttributes="Bold" />
-                                    <Label x:Name="DiagnosisLabel"
-                                           TextColor="{StaticResource BodyText}"
-                                           FontSize="14" />
+                                    <Grid ColumnDefinitions="*,*"
+                                          ColumnSpacing="12">
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="Diagnóstico"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold" />
+                                            <Label x:Name="DiagnosisLabel"
+                                                   TextColor="{StaticResource BodyText}"
+                                                   FontSize="13"
+                                                   LineBreakMode="WordWrap" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1"
+                                                             Spacing="5">
+                                            <Label Text="Conduta"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold" />
+                                            <Label x:Name="CareLabel"
+                                                   TextColor="{StaticResource BodyText}"
+                                                   FontSize="13"
+                                                   LineBreakMode="WordWrap" />
+                                        </VerticalStackLayout>
+                                    </Grid>
                                 </VerticalStackLayout>
                             </Border>
 
@@ -403,17 +674,22 @@
                                     StrokeThickness="1"
                                     Padding="16,14">
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="12" />
+                                    <RoundRectangle CornerRadius="18" />
                                 </Border.StrokeShape>
-                                <VerticalStackLayout Spacing="8">
-                                    <Label Text="Cuidados"
-                                           TextColor="{StaticResource BodyText}"
-                                           FontSize="17"
-                                           FontAttributes="Bold" />
-                                    <Label x:Name="CareLabel"
-                                           TextColor="{StaticResource BodyText}"
-                                           FontSize="14"
-                                           LineBreakMode="WordWrap" />
+                                <VerticalStackLayout Spacing="10">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Text="Registro de ações"
+                                               TextColor="{StaticResource BodyText}"
+                                               FontSize="17"
+                                               FontAttributes="Bold" />
+                                        <Label x:Name="ActionLogCountLabel"
+                                               Grid.Column="1"
+                                               TextColor="{StaticResource SoftText}"
+                                               FontSize="12"
+                                               VerticalOptions="Center" />
+                                    </Grid>
+                                    <VerticalStackLayout x:Name="ActionLogStack"
+                                                         Spacing="8" />
                                 </VerticalStackLayout>
                             </Border>
                         </VerticalStackLayout>
@@ -423,25 +699,146 @@
                                 IsVisible="False">
                         <VerticalStackLayout x:Name="HistoryStack"
                                              Spacing="12"
-                                             Padding="0,0,0,18" />
+                                             Padding="0,0,0,92" />
                     </ScrollView>
 
                     <ScrollView x:Name="NotesContent"
                                 IsVisible="False">
                         <VerticalStackLayout Spacing="14"
-                                             Padding="0,0,0,18">
-                            <Editor x:Name="PatientNotesEditor"
-                                    TextChanged="OnPatientNotesChanged"
-                                    TextColor="{StaticResource BodyText}"
-                                    FontSize="15"
-                                    AutoSize="TextChanges"
-                                    HeightRequest="260"
-                                    BackgroundColor="#FFFFFF"
-                                    Placeholder="Anote raciocinio, hipoteses, condutas e pontos de estudo..."
-                                    PlaceholderColor="{StaticResource SoftText}" />
+                                             Padding="0,0,0,92">
+                            <Border BackgroundColor="#FFFFFF"
+                                    Stroke="{StaticResource Line}"
+                                    StrokeThickness="1"
+                                    Padding="16,14">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="18" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="12">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Spacing="1">
+                                            <Label Text="Caderno do caso"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="18"
+                                                   FontAttributes="Bold" />
+                                            <Label x:Name="NotesStatusLabel"
+                                                   Text="Registre hipóteses e sinais que sustentam sua decisão"
+                                                   TextColor="{StaticResource SoftText}"
+                                                   FontSize="11" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <FlexLayout Wrap="Wrap"
+                                                Direction="Row"
+                                                AlignItems="Start"
+                                                JustifyContent="Start">
+                                        <Border BackgroundColor="#EEF4EC"
+                                                Stroke="#DDE7DA"
+                                                StrokeThickness="1"
+                                                Padding="10,5"
+                                                Margin="0,0,8,8">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="14" />
+                                            </Border.StrokeShape>
+                                            <Label Text="Hipótese"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold" />
+                                        </Border>
+                                        <Border BackgroundColor="#EEF4EC"
+                                                Stroke="#DDE7DA"
+                                                StrokeThickness="1"
+                                                Padding="10,5"
+                                                Margin="0,0,8,8">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="14" />
+                                            </Border.StrokeShape>
+                                            <Label Text="Sinais"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold" />
+                                        </Border>
+                                        <Border BackgroundColor="#EEF4EC"
+                                                Stroke="#DDE7DA"
+                                                StrokeThickness="1"
+                                                Padding="10,5"
+                                                Margin="0,0,8,8">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="14" />
+                                            </Border.StrokeShape>
+                                            <Label Text="Exames"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold" />
+                                        </Border>
+                                        <Border BackgroundColor="#EEF4EC"
+                                                Stroke="#DDE7DA"
+                                                StrokeThickness="1"
+                                                Padding="10,5"
+                                                Margin="0,0,8,8">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="14" />
+                                            </Border.StrokeShape>
+                                            <Label Text="Conduta"
+                                                   TextColor="{StaticResource OliveText}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold" />
+                                        </Border>
+                                    </FlexLayout>
+
+                                    <Editor x:Name="PatientNotesEditor"
+                                            TextChanged="OnPatientNotesChanged"
+                                            TextColor="{StaticResource BodyText}"
+                                            FontSize="15"
+                                            AutoSize="TextChanges"
+                                            HeightRequest="270"
+                                            BackgroundColor="#FAFBF8"
+                                            Placeholder="Anote raciocínio, hipóteses, condutas e pontos de estudo..."
+                                            PlaceholderColor="{StaticResource SoftText}" />
+                                </VerticalStackLayout>
+                            </Border>
                         </VerticalStackLayout>
                     </ScrollView>
                 </Grid>
+
+                <Border x:Name="FloatingActionButton"
+                        Grid.Row="2"
+                        BackgroundColor="{StaticResource Sage}"
+                        StrokeThickness="0"
+                        HeightRequest="54"
+                        WidthRequest="168"
+                        HorizontalOptions="End"
+                        VerticalOptions="End"
+                        Margin="0,0,8,18">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnActionsTapped" />
+                    </Border.GestureRecognizers>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="27" />
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="28,*"
+                          ColumnSpacing="6"
+                          Padding="14,0">
+                        <Image Source="icon_case_actions.svg"
+                               HeightRequest="21"
+                               WidthRequest="21"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                        <Label x:Name="FloatingActionLabel"
+                               Grid.Column="1"
+                               Text="Ações do caso"
+                               TextColor="White"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"
+                               LineBreakMode="TailTruncation" />
+                    </Grid>
+                    <Border.Shadow>
+                        <Shadow Brush="#33000000"
+                                Offset="0,8"
+                                Radius="16"
+                                Opacity="0.24" />
+                    </Border.Shadow>
+                </Border>
             </Grid>
 
             <controls:BottomNavigationBar Grid.Row="1"
@@ -461,43 +858,178 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="18" />
                 </Border.StrokeShape>
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Acoes do treino"
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Escolha sua ação"
                            TextColor="{StaticResource OliveText}"
                            FontSize="20"
                            FontAttributes="Bold" />
-                    <Label Text="Escolha uma etapa. O caso pontua precisao, seguranca e eficiencia."
+                    <Label x:Name="ActionMenuStatusLabel"
+                           Text="Cada escolha fica registrada e influencia sua nota final."
                            TextColor="{StaticResource SoftText}"
                            FontSize="12" />
-                    <Button Text="Solicitar exame"
-                            Clicked="OnExamClicked"
+
+                    <Border x:Name="ActionProgressCard"
+                            IsVisible="False"
                             BackgroundColor="#EEF4EC"
-                            TextColor="{StaticResource OliveText}"
-                            FontAttributes="Bold"
-                            CornerRadius="10"
-                            HeightRequest="44" />
-                    <Button Text="Diagnosticar"
-                            Clicked="OnDiagnoseClicked"
-                            BackgroundColor="{StaticResource Sage}"
-                            TextColor="White"
-                            FontAttributes="Bold"
-                            CornerRadius="10"
-                            HeightRequest="44" />
-                    <Button Text="Receitar tratamento"
-                            Clicked="OnTreatmentClicked"
-                            BackgroundColor="#EEF4EC"
-                            TextColor="{StaticResource OliveText}"
-                            FontAttributes="Bold"
-                            CornerRadius="10"
-                            HeightRequest="44" />
-                    <Button Text="Encerrar caso"
-                            Clicked="OnFinishCaseClicked"
-                            BackgroundColor="#EEF4EC"
-                            TextColor="{StaticResource OliveText}"
-                            FontAttributes="Bold"
-                            CornerRadius="10"
-                            HeightRequest="44" />
-                    <Button Text="Cancelar"
+                            Stroke="{StaticResource SageSoft}"
+                            StrokeThickness="1"
+                            Padding="14,12">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="9">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <VerticalStackLayout Spacing="1">
+                                    <Label Text="Em andamento"
+                                           TextColor="{StaticResource OliveText}"
+                                           FontSize="12"
+                                           FontAttributes="Bold" />
+                                    <Label x:Name="PendingActionTitleLabel"
+                                           TextColor="{StaticResource BodyText}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           LineBreakMode="TailTruncation" />
+                                </VerticalStackLayout>
+                                <Label x:Name="PendingActionCountdownLabel"
+                                       Grid.Column="1"
+                                       TextColor="{StaticResource OliveText}"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center" />
+                            </Grid>
+
+                            <ProgressBar x:Name="PendingActionProgressBar"
+                                         ProgressColor="{StaticResource Sage}"
+                                         BackgroundColor="#DDE7DA"
+                                         HeightRequest="7" />
+
+                            <Label x:Name="PendingActionDetailLabel"
+                                   TextColor="{StaticResource SoftText}"
+                                   FontSize="12"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Grid x:Name="ActionOptionsGrid"
+                          ColumnDefinitions="*,*"
+                          RowDefinitions="Auto,Auto"
+                          ColumnSpacing="10"
+                          RowSpacing="10">
+                        <Border x:Name="ExamActionCard"
+                                BackgroundColor="#EEF4EC"
+                                Stroke="#DDE7DA"
+                                StrokeThickness="1"
+                                Padding="12,10">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnExamActionTapped" />
+                            </Border.GestureRecognizers>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="3">
+                                <Label x:Name="ExamActionTitleLabel"
+                                       Text="Solicitar exame"
+                                       TextColor="{StaticResource OliveText}"
+                                       FontSize="15"
+                                       FontAttributes="Bold" />
+                                <Label x:Name="ExamActionSubtitleLabel"
+                                       Text="+20 se prioritario"
+                                       TextColor="{StaticResource SoftText}"
+                                       FontSize="11" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border x:Name="DiagnosisActionCard"
+                                Grid.Column="1"
+                                BackgroundColor="{StaticResource Sage}"
+                                StrokeThickness="0"
+                                Padding="12,10">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnDiagnoseActionTapped" />
+                            </Border.GestureRecognizers>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="3">
+                                <Label x:Name="DiagnosisActionTitleLabel"
+                                       Text="Registrar hipótese"
+                                       TextColor="White"
+                                       FontSize="14"
+                                       FontAttributes="Bold" />
+                                <Label x:Name="DiagnosisActionSubtitleLabel"
+                                       Text="+40 se correto"
+                                       TextColor="#F7FBF5"
+                                       FontSize="11" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border x:Name="TreatmentActionCard"
+                                Grid.Row="1"
+                                BackgroundColor="#EEF4EC"
+                                Stroke="#DDE7DA"
+                                StrokeThickness="1"
+                                Padding="12,10">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnTreatmentActionTapped" />
+                            </Border.GestureRecognizers>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="3">
+                                <Label x:Name="TreatmentActionTitleLabel"
+                                       Text="Definir conduta"
+                                       TextColor="{StaticResource OliveText}"
+                                       FontSize="15"
+                                       FontAttributes="Bold" />
+                                <Label x:Name="TreatmentActionSubtitleLabel"
+                                       Text="+30 se seguro"
+                                       TextColor="{StaticResource SoftText}"
+                                       FontSize="11" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border x:Name="FinishActionCard"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                BackgroundColor="#F8FAF6"
+                                Stroke="{StaticResource Line}"
+                                StrokeThickness="1"
+                                Padding="12,10">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnFinishActionTapped" />
+                            </Border.GestureRecognizers>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="3">
+                                <Label x:Name="FinishActionTitleLabel"
+                                       Text="Finalizar caso"
+                                       TextColor="{StaticResource OliveText}"
+                                       FontSize="15"
+                                       FontAttributes="Bold" />
+                                <Label x:Name="FinishActionSubtitleLabel"
+                                       Text="gera nota final"
+                                       TextColor="{StaticResource SoftText}"
+                                       FontSize="11" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <Border BackgroundColor="#FAFBF8"
+                            Stroke="{StaticResource Line}"
+                            StrokeThickness="1"
+                            Padding="12,10">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12" />
+                        </Border.StrokeShape>
+                        <Label x:Name="ActionMenuLastActionLabel"
+                               Text="Nenhuma ação registrada ainda."
+                               TextColor="{StaticResource SoftText}"
+                               FontSize="12"
+                               LineBreakMode="WordWrap" />
+                    </Border>
+
+                    <Button Text="Fechar"
                             Clicked="OnCancelActionsClicked"
                             BackgroundColor="#FFFFFF"
                             BorderColor="{StaticResource Line}"
@@ -509,5 +1041,8 @@
                 </VerticalStackLayout>
             </Border>
         </Grid>
+
+        <controls:AppModalHost x:Name="ModalHost"
+                               ZIndex="200" />
     </Grid>
 </ContentPage>

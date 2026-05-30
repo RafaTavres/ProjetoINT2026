@@ -79,7 +79,7 @@ public partial class MainPage : ContentPage
 
 		isLoading = true;
 		IsRefreshing = true;
-		FeedStatusLabel.Text = forceRefresh ? "Buscando novos conteudos..." : "Carregando feed...";
+		FeedStatusLabel.Text = forceRefresh ? "Buscando novos conteúdos..." : "Carregando feed...";
 
 		try
 		{
@@ -92,11 +92,11 @@ public partial class MainPage : ContentPage
 				Posts.Add(post);
 			}
 
-			FeedStatusLabel.Text = posts.Count > 0 ? "Puxe para atualizar e ver outros conteudos" : "Nenhum conteudo encontrado";
+			FeedStatusLabel.Text = posts.Count > 0 ? "Puxe para atualizar e ver outros conteúdos" : "Nenhum conteúdo encontrado";
 		}
 		catch
 		{
-			FeedStatusLabel.Text = "Nao foi possivel atualizar agora";
+			FeedStatusLabel.Text = "Não foi possível atualizar agora";
 		}
 		finally
 		{

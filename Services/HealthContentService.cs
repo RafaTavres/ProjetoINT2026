@@ -13,7 +13,7 @@ public interface IHealthContentService
 
 public sealed partial class HealthContentService(HttpClient httpClient) : IHealthContentService
 {
-	private const string CacheKey = "home_health_feed_cache";
+	private const string CacheKey = "home_health_feed_cache_v2";
 	private int refreshCounter;
 
 	private static readonly FeedSource[] RssSources =
@@ -66,6 +66,7 @@ public sealed partial class HealthContentService(HttpClient httpClient) : IHealt
 			.GroupBy(post => post.Url)
 			.Select(group => group.First())
 			.Select(EnsurePostImage)
+			.Where(IsRelevantForNursing)
 			.OrderByDescending(post => post.PublishedAt)
 			.Take(48)
 			.ToList();
@@ -242,6 +243,25 @@ public sealed partial class HealthContentService(HttpClient httpClient) : IHealt
 		return post.HasImage ? post : post with { ImageUrl = PickFallbackImage(post.Title, post.Summary) };
 	}
 
+	private static bool IsRelevantForNursing(HealthPost post)
+	{
+		if (post.Source is "MedlinePlus" or "Nursing Times" or "Drugs.com" or "Ministerio da Saude" or "NIH" or "OMS")
+		{
+			return true;
+		}
+
+		var text = $"{post.Title} {post.Summary}".ToLowerInvariant();
+		return HasAny(
+			text,
+			"nurs", "patient", "clinical", "hospital", "care", "treatment", "therapy",
+			"diagnos", "symptom", "disease", "infection", "surgery", "wound", "injur",
+			"medication", "medicine", "drug", "dose", "vaccine", "vital", "blood pressure",
+			"cardio", "respir", "oxygen", "pneumonia", "diabetes", "stroke", "pain",
+			"enferm", "paciente", "cuidado", "tratamento", "diagnostico", "diagnóstico",
+			"sintoma", "doenca", "doença", "infecção", "cirurgia", "ferida", "medicamento",
+			"vacina", "pressão", "sinais vitais");
+	}
+
 	private static string PickFallbackImage(string title, string? summary = null)
 	{
 		var text = $"{title} {summary}".ToLowerInvariant();
@@ -321,9 +341,9 @@ public sealed partial class HealthContentService(HttpClient httpClient) : IHealt
 	{
 		return
 		[
-			new("Seguranca na administracao de medicamentos", "Revise os certos da administracao e registre eventos relevantes durante o cuidado.", "Florence", "https://medlineplus.gov/", DateTimeOffset.Now, "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=900&q=80", false),
-			new("Sinais vitais no raciocinio clinico", "Use PA, FC, FR, temperatura e saturacao para priorizar condutas em simulacoes.", "Florence", "https://medlineplus.gov/", DateTimeOffset.Now.AddMinutes(-5), "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=80", false),
-			new("Curativos e avaliacao de feridas", "Observe exsudato, bordas, odor, dor e sinais flogisticos antes de propor cuidado.", "Florence", "https://medlineplus.gov/", DateTimeOffset.Now.AddMinutes(-10), "https://images.unsplash.com/photo-1581595220892-b0739db3ba8c?auto=format&fit=crop&w=900&q=80", false)
+			new("Segurança na administração de medicamentos", "Revise os certos da administração e registre eventos relevantes durante o cuidado.", "Florence", "https://medlineplus.gov/", DateTimeOffset.Now, "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=900&q=80", false),
+			new("Sinais vitais no raciocínio clínico", "Use PA, FC, FR, temperatura e saturação para priorizar condutas em simulações.", "Florence", "https://medlineplus.gov/", DateTimeOffset.Now.AddMinutes(-5), "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=80", false),
+			new("Curativos e avaliação de feridas", "Observe exsudato, bordas, odor, dor e sinais flogísticos antes de propor cuidado.", "Florence", "https://medlineplus.gov/", DateTimeOffset.Now.AddMinutes(-10), "https://images.unsplash.com/photo-1581595220892-b0739db3ba8c?auto=format&fit=crop&w=900&q=80", false)
 		];
 	}
 
@@ -353,9 +373,9 @@ public sealed record HealthPost(
 	public bool HasNoImage => !HasImage;
 
 	public string TypeLabel => IsVideo || Source.Contains("Video", StringComparison.OrdinalIgnoreCase)
-		? "Video"
+		? "Vídeo"
 		: Source is "Medical Xpress" or "ScienceDaily" or "Nursing Times" or "Drugs.com" or "Ministerio da Saude" or "NIH" or "OMS"
-			? "Noticia"
+			? "Notícia"
 			: "Artigo";
 }
 

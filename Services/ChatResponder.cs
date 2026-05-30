@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace ProjetoINT2026.Services;
@@ -19,18 +20,15 @@ public sealed class ChatApiOptions
 
 public sealed class GeminiChatResponder(HttpClient httpClient, ChatApiOptions options) : IChatResponder
 {
-	private readonly NursingChatResponder fallbackResponder = new();
-
 	public async Task<string> GetResponseAsync(string message, IReadOnlyList<ChatHistoryItem>? history = null)
 	{
 		if (string.IsNullOrWhiteSpace(options.ApiKey))
 		{
-			return await fallbackResponder.GetResponseAsync(message, history);
+			return "Chave da Gemini nao configurada.";
 		}
 
 		try
 		{
-			var hasConversationContext = history?.Count > 1;
 			var model = string.IsNullOrWhiteSpace(options.Model) ? "gemini-2.5-flash-lite" : options.Model;
 			var endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={Uri.EscapeDataString(options.ApiKey)}";
 			var geminiRequest = new GeminiGenerateRequest(
@@ -43,13 +41,14 @@ public sealed class GeminiChatResponder(HttpClient httpClient, ChatApiOptions op
 				new GeminiGenerationConfig(0.35, 520));
 
 			var response = await httpClient.PostAsJsonAsync(endpoint, geminiRequest);
+			var responseText = await response.Content.ReadAsStringAsync();
 
 			if (!response.IsSuccessStatusCode)
 			{
-				return await fallbackResponder.GetResponseAsync(message, history);
+				return GetGeminiErrorText(responseText, response.StatusCode);
 			}
 
-			var geminiResponse = await response.Content.ReadFromJsonAsync<GeminiGenerateResponse>();
+			var geminiResponse = JsonSerializer.Deserialize<GeminiGenerateResponse>(responseText);
 			var reply = geminiResponse?.Candidates?
 				.FirstOrDefault()?
 				.Content?
@@ -58,13 +57,42 @@ public sealed class GeminiChatResponder(HttpClient httpClient, ChatApiOptions op
 				.Text;
 
 			return string.IsNullOrWhiteSpace(reply)
-				? await fallbackResponder.GetResponseAsync(message, history)
-				: CleanAiReply(reply, hasConversationContext);
+				? GetEmptyGeminiResponseText(responseText)
+				: reply.Trim();
+		}
+		catch (Exception exception)
+		{
+			return $"Erro ao chamar Gemini: {exception.Message}";
+		}
+	}
+
+	private static string GetGeminiErrorText(string responseText, System.Net.HttpStatusCode statusCode)
+	{
+		if (string.IsNullOrWhiteSpace(responseText))
+		{
+			return $"Gemini retornou HTTP {(int)statusCode}.";
+		}
+
+		try
+		{
+			var errorResponse = JsonSerializer.Deserialize<GeminiErrorResponse>(responseText);
+			if (!string.IsNullOrWhiteSpace(errorResponse?.Error?.Message))
+			{
+				return $"Gemini: {errorResponse.Error.Message}";
+			}
 		}
 		catch
 		{
-			return await fallbackResponder.GetResponseAsync(message, history);
 		}
+
+		return responseText.Trim();
+	}
+
+	private static string GetEmptyGeminiResponseText(string responseText)
+	{
+		return string.IsNullOrWhiteSpace(responseText)
+			? "Gemini retornou uma resposta vazia."
+			: responseText.Trim();
 	}
 
 	private static string BuildPrompt(string userMessage, IReadOnlyList<ChatHistoryItem>? history)
@@ -326,3 +354,11 @@ public sealed record GeminiContentResponse(
 
 public sealed record GeminiPartResponse(
 	[property: JsonPropertyName("text")] string? Text);
+
+public sealed record GeminiErrorResponse(
+	[property: JsonPropertyName("error")] GeminiError? Error);
+
+public sealed record GeminiError(
+	[property: JsonPropertyName("code")] int Code,
+	[property: JsonPropertyName("message")] string? Message,
+	[property: JsonPropertyName("status")] string? Status);

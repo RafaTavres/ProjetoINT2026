@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ProjetoINT2026.Controls.AppModalHost"
+             IsVisible="False"
+             BackgroundColor="#88000000">
+    <Grid Padding="24">
+        <Border BackgroundColor="#FFFFFF"
+                Stroke="#E0E3DC"
+                StrokeThickness="1"
+                Padding="18"
+                VerticalOptions="Center">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="20" />
+            </Border.StrokeShape>
+            <Border.Shadow>
+                <Shadow Brush="#33000000"
+                        Offset="0,10"
+                        Radius="24"
+                        Opacity="0.24" />
+            </Border.Shadow>
+
+            <VerticalStackLayout Spacing="14">
+                <VerticalStackLayout Spacing="3">
+                    <Label x:Name="TitleLabel"
+                           TextColor="#536B50"
+                           FontSize="21"
+                           FontAttributes="Bold"
+                           FontFamily="OpenSansSemibold"
+                           LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+
+                <ScrollView x:Name="MessageScroll"
+                            MaximumHeightRequest="340">
+                    <VerticalStackLayout x:Name="MessageStack"
+                                         Spacing="10">
+                        <Label x:Name="MessageLabel"
+                               TextColor="#777D75"
+                               FontSize="13"
+                               LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+                </ScrollView>
+
+                <Entry x:Name="InputEntry"
+                       IsVisible="False"
+                       BackgroundColor="#FAFBF8"
+                       TextColor="#20251F"
+                       PlaceholderColor="#8A9284"
+                       FontSize="15"
+                       HeightRequest="46" />
+
+                <ScrollView x:Name="OptionsScroll"
+                            IsVisible="False"
+                            MaximumHeightRequest="330">
+                    <VerticalStackLayout x:Name="OptionsStack"
+                                         Spacing="8" />
+                </ScrollView>
+
+                <Grid x:Name="ButtonsGrid"
+                      ColumnDefinitions="*,*"
+                      ColumnSpacing="10">
+                    <Button x:Name="CancelButton"
+                            Text="Cancelar"
+                            Clicked="OnCancelClicked"
+                            BackgroundColor="#FFFFFF"
+                            BorderColor="#E0E3DC"
+                            BorderWidth="1"
+                            TextColor="#66745C"
+                            FontSize="13"
+                            FontAttributes="Bold"
+                            CornerRadius="12"
+                            HeightRequest="44" />
+                    <Button x:Name="PrimaryButton"
+                            Grid.Column="1"
+                            Text="OK"
+                            Clicked="OnPrimaryClicked"
+                            BackgroundColor="#8FAA87"
+                            TextColor="White"
+                            FontSize="13"
+                            FontAttributes="Bold"
+                            CornerRadius="12"
+                            HeightRequest="44" />
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentView>

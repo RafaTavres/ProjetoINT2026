@@ -96,7 +96,7 @@ public partial class NotesPage : ContentPage
 
 	private async void OnAddFolderClicked(object sender, TappedEventArgs e)
 	{
-		var folderName = await DisplayPromptAsync("Nova pasta", "Nome da pasta", "Criar", "Cancelar", "Ex: Procedimentos", maxLength: 28);
+		var folderName = await ModalHost.ShowPromptAsync("Nova pasta", "Nome da pasta", "Criar", "Cancelar", "Ex: Procedimentos", 28);
 		if (string.IsNullOrWhiteSpace(folderName))
 		{
 			return;
@@ -124,7 +124,7 @@ public partial class NotesPage : ContentPage
 
 		var folderName = selectedFolder.Name;
 		var notesInFolder = NoteStore.Notes.Count(note => note.FolderName == folderName);
-		var shouldDelete = await DisplayAlert("Apagar pasta", $"Apagar a pasta {folderName} e {notesInFolder} nota(s)?", "Apagar", "Cancelar");
+		var shouldDelete = await ModalHost.ShowConfirmationAsync("Apagar pasta", $"Apagar a pasta {folderName} e {notesInFolder} nota(s)?", "Apagar", "Cancelar");
 		if (!shouldDelete)
 		{
 			return;
@@ -166,7 +166,7 @@ public partial class NotesPage : ContentPage
 			return;
 		}
 
-		var shouldDelete = await DisplayAlert("Apagar nota", $"Deseja apagar {selectedNote.Title}?", "Apagar", "Cancelar");
+		var shouldDelete = await ModalHost.ShowConfirmationAsync("Apagar nota", $"Deseja apagar {selectedNote.Title}?", "Apagar", "Cancelar");
 		if (!shouldDelete)
 		{
 			return;

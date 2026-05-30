@@ -17,19 +17,19 @@
         <Color x:Key="Line">#E4E7E0</Color>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="*,86">
+    <Grid RowDefinitions="*,88">
         <Grid Grid.Row="0"
-              RowDefinitions="100,38,190,*"
+              RowDefinitions="104,42,218,34,*"
               Padding="26,40,26,0">
             <Grid>
                 <VerticalStackLayout Spacing="3"
                                      VerticalOptions="Center">
-                    <Label Text="Home"
+                    <Label Text="Feed"
                            TextColor="{StaticResource SageDark}"
                            FontSize="32"
                            FontAttributes="Bold"
                            FontFamily="OpenSansSemibold" />
-                    <Label Text="Noticias e artigos para estudar enfermagem"
+                    <Label Text="Notícias e artigos para estudar enfermagem"
                            TextColor="{StaticResource SoftText}"
                            FontSize="13" />
                     <Label x:Name="FeedStatusLabel"
@@ -43,11 +43,11 @@
                     BackgroundColor="#EEF4EC"
                     Stroke="#DDE7DA"
                     StrokeThickness="1"
-                    Padding="12,0">
+                    Padding="13,0">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="14" />
                 </Border.StrokeShape>
-                <Label Text="Conteudo educativo. Nao substitui orientacao profissional ou protocolos da instituicao."
+                <Label Text="Conteúdo educativo. Não substitui orientação profissional ou protocolos da instituição."
                        TextColor="{StaticResource SageDark}"
                        FontSize="11"
                        VerticalOptions="Center"
@@ -64,9 +64,15 @@
                     <TapGestureRecognizer Tapped="OnPostTapped" />
                 </Border.GestureRecognizers>
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="10" />
+                    <RoundRectangle CornerRadius="16" />
                 </Border.StrokeShape>
-                <Grid RowDefinitions="122,*"
+                <Border.Shadow>
+                    <Shadow Brush="#22000000"
+                            Offset="0,8"
+                            Radius="18"
+                            Opacity="0.16" />
+                </Border.Shadow>
+                <Grid RowDefinitions="146,*"
                       x:DataType="services:HealthPost">
                     <Grid>
                         <Image Source="{Binding ImageUrl}"
@@ -95,6 +101,20 @@
                                    FontSize="10"
                                    FontAttributes="Bold" />
                         </Border>
+                        <Border BackgroundColor="#FFFFFF"
+                                StrokeThickness="0"
+                                Padding="9,4"
+                                HorizontalOptions="End"
+                                VerticalOptions="Start"
+                                Margin="10">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <Label Text="Destaque"
+                                   TextColor="{StaticResource SageDark}"
+                                   FontSize="10"
+                                   FontAttributes="Bold" />
+                        </Border>
                     </Grid>
 
                     <VerticalStackLayout Grid.Row="1"
@@ -102,7 +122,7 @@
                                          Spacing="5">
                         <Label Text="{Binding Title}"
                                TextColor="{StaticResource SageDark}"
-                               FontSize="16"
+                               FontSize="17"
                                FontAttributes="Bold"
                                LineBreakMode="WordWrap"
                                MaxLines="2" />
@@ -113,12 +133,31 @@
                 </Grid>
             </Border>
 
-            <RefreshView Grid.Row="3"
+            <Grid Grid.Row="3"
+                  ColumnDefinitions="*,Auto"
+                  Margin="0,12,0,0">
+                <Label Text="Mais conteúdos"
+                       TextColor="{StaticResource BodyText}"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center" />
+                <Label Grid.Column="1"
+                       Text="puxe para atualizar"
+                       TextColor="{StaticResource SoftText}"
+                       FontSize="11"
+                       VerticalOptions="Center" />
+            </Grid>
+
+            <RefreshView Grid.Row="4"
                          IsRefreshing="{Binding IsRefreshing}"
                          Command="{Binding RefreshCommand}"
-                         Margin="0,12,0,0">
+                         Margin="0,8,0,12">
                 <CollectionView ItemsSource="{Binding Posts}"
                                 SelectionMode="None">
+                    <CollectionView.Footer>
+                        <BoxView HeightRequest="18"
+                                 Color="Transparent" />
+                    </CollectionView.Footer>
                     <CollectionView.EmptyView>
                         <VerticalStackLayout Padding="0,40"
                                              Spacing="10"
@@ -146,11 +185,17 @@
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnPostTapped" />
                                 </Border.GestureRecognizers>
+                                <Border.Shadow>
+                                    <Shadow Brush="#16000000"
+                                            Offset="0,5"
+                                            Radius="12"
+                                            Opacity="0.14" />
+                                </Border.Shadow>
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="8" />
+                                    <RoundRectangle CornerRadius="12" />
                                 </Border.StrokeShape>
-                                <Grid RowDefinitions="88,*"
-                                      HeightRequest="198">
+                                <Grid RowDefinitions="104,*"
+                                      HeightRequest="222">
                                     <Grid>
                                         <Image Source="{Binding ImageUrl}"
                                                IsVisible="{Binding HasImage}"
@@ -164,16 +209,30 @@
                                                    HorizontalOptions="Center"
                                                    VerticalOptions="Center" />
                                         </Grid>
+                                        <Border BackgroundColor="#FFFFFF"
+                                                StrokeThickness="0"
+                                                Padding="8,3"
+                                                HorizontalOptions="Start"
+                                                VerticalOptions="Start"
+                                                Margin="8">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="9" />
+                                            </Border.StrokeShape>
+                                            <Label Text="{Binding TypeLabel}"
+                                                   TextColor="{StaticResource SageDark}"
+                                                   FontSize="9"
+                                                   FontAttributes="Bold" />
+                                        </Border>
                                     </Grid>
                                     <VerticalStackLayout Grid.Row="1"
-                                                         Padding="10,9"
+                                                         Padding="11,10"
                                                          Spacing="6">
                                         <Label Text="{Binding Title}"
                                                TextColor="{StaticResource BodyText}"
                                                FontSize="13"
                                                FontAttributes="Bold"
                                                LineBreakMode="WordWrap"
-                                               MaxLines="3" />
+                                               MaxLines="4" />
                                         <Label Text="{Binding SourceLine}"
                                                TextColor="{StaticResource SoftText}"
                                                FontSize="10"

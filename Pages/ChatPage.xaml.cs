@@ -8,11 +8,12 @@ namespace ProjetoINT2026.Pages;
 
 public partial class ChatPage : ContentPage
 {
-	private const string DefaultAiNotesFolder = "Anotacoes IA";
+	private const string DefaultAiNotesFolder = "Anotações IA";
 	private readonly IChatResponder chatResponder;
 	private ChatAttachment? pendingAttachment;
 	private string? pendingNoteResponse;
 	private string selectedSaveFolderName = DefaultAiNotesFolder;
+	private bool isResponding;
 
 	public ChatPage()
 		: this(MauiProgram.Services.GetRequiredService<IChatResponder>())
@@ -32,7 +33,27 @@ public partial class ChatPage : ContentPage
 
 	public ObservableCollection<SaveFolderOption> SaveFolderOptions { get; } = [];
 
+	public bool IsResponding
+	{
+		get => isResponding;
+		set
+		{
+			if (isResponding == value)
+			{
+				return;
+			}
+
+			isResponding = value;
+			OnPropertyChanged();
+		}
+	}
+
 	private async void OnSendClicked(object sender, EventArgs e)
+	{
+		await SendCurrentMessageAsync();
+	}
+
+	private async void OnSendTapped(object sender, TappedEventArgs e)
 	{
 		await SendCurrentMessageAsync();
 	}
@@ -60,10 +81,23 @@ public partial class ChatPage : ContentPage
 		SaveMessages();
 		await ScrollToLatestMessageAsync();
 
-		var response = await chatResponder.GetResponseAsync(messageForAi, historyBeforeMessage);
-		Messages.Add(ChatMessage.FromAssistant(response));
-		SaveMessages();
-		await ScrollToLatestMessageAsync();
+		IsResponding = true;
+		try
+		{
+			var response = await chatResponder.GetResponseAsync(messageForAi, historyBeforeMessage);
+			if (string.IsNullOrWhiteSpace(response))
+			{
+				return;
+			}
+
+			Messages.Add(ChatMessage.FromAssistant(response));
+			SaveMessages();
+			await ScrollToLatestMessageAsync();
+		}
+		finally
+		{
+			IsResponding = false;
+		}
 	}
 
 	private static string BuildUserMessageText(string? text, ChatAttachment? attachment)
@@ -75,7 +109,7 @@ public partial class ChatPage : ContentPage
 	private static string BuildAiMessageText(string? text, ChatAttachment? attachment)
 	{
 		var message = string.IsNullOrWhiteSpace(text)
-			? "Analise o arquivo anexado e destaque os pontos uteis para enfermagem."
+			? "Analise o arquivo anexado e destaque os pontos úteis para enfermagem."
 			: text.Trim();
 
 		if (attachment is null)
@@ -89,7 +123,7 @@ public partial class ChatPage : ContentPage
 		Arquivo anexado:
 		Nome: {attachment.FileName}
 		Tipo: {attachment.ContentType}
-		Conteudo extraido:
+		Conteúdo extraído:
 		{attachment.TextPreview}
 		""";
 	}
@@ -99,7 +133,7 @@ public partial class ChatPage : ContentPage
 		var savedMessages = ChatSessionStore.Load();
 		if (savedMessages.Count == 0)
 		{
-			Messages.Add(ChatMessage.FromAssistant("Ola! Sou a Florence. Me diga sua duvida de enfermagem que eu te ajudo de forma objetiva."));
+			Messages.Add(ChatMessage.FromAssistant("Olá! Sou a Florence. Me diga sua dúvida de enfermagem que eu te ajudo de forma objetiva."));
 			SaveMessages();
 			return;
 		}
@@ -142,7 +176,7 @@ public partial class ChatPage : ContentPage
 		}
 		catch
 		{
-			await DisplayAlert("Arquivo", "Nao foi possivel anexar esse arquivo.", "OK");
+			await ModalHost.ShowMessageAsync("Arquivo", "Não foi possível anexar esse arquivo.");
 		}
 	}
 
@@ -237,7 +271,7 @@ public partial class ChatPage : ContentPage
 		var note = NoteStore.AddFromChatResponse(pendingNoteResponse, selectedSaveFolderName);
 		pendingNoteResponse = null;
 		SaveNotePopup.IsVisible = false;
-		await DisplayAlert("Nota salva", $"{note.Title} foi salva em {note.FolderName}.", "OK");
+		await ModalHost.ShowMessageAsync("Nota salva", $"{note.Title} foi salva em {note.FolderName}.");
 	}
 }
 
@@ -263,7 +297,7 @@ public sealed class ChatAttachment
 		var extension = Path.GetExtension(file.FileName);
 		if (!TextExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
 		{
-			return new ChatAttachment(file.FileName, file.ContentType, "Nao foi possivel ler o conteudo desse tipo de arquivo no MVP. Use a pergunta do usuario e o nome do arquivo como contexto.");
+			return new ChatAttachment(file.FileName, file.ContentType, "Não foi possível ler o conteúdo desse tipo de arquivo no MVP. Use a pergunta do usuário e o nome do arquivo como contexto.");
 		}
 
 		try
@@ -271,12 +305,12 @@ public sealed class ChatAttachment
 			await using var stream = await file.OpenReadAsync();
 			using var reader = new StreamReader(stream);
 			var content = await reader.ReadToEndAsync();
-			var preview = content.Length > 5000 ? $"{content[..5000]}\n\n[conteudo cortado]" : content;
+			var preview = content.Length > 5000 ? $"{content[..5000]}\n\n[conteúdo cortado]" : content;
 			return new ChatAttachment(file.FileName, file.ContentType, preview);
 		}
 		catch
 		{
-			return new ChatAttachment(file.FileName, file.ContentType, "Nao foi possivel ler o conteudo do arquivo.");
+			return new ChatAttachment(file.FileName, file.ContentType, "Não foi possível ler o conteúdo do arquivo.");
 		}
 	}
 }
@@ -293,6 +327,7 @@ public sealed class ChatMessage : INotifyPropertyChanged
 		CanSaveAsNote = !isUser;
 		Column = isUser ? 1 : 0;
 		BubbleColor = isUser ? Color.FromArgb("#AFC0A3") : Colors.White;
+		BubbleStrokeColor = isUser ? Color.FromArgb("#AFC0A3") : Color.FromArgb("#E4E7E0");
 		TextColor = isUser ? Colors.White : Color.FromArgb("#343A32");
 		SenderColor = isUser ? Colors.White : Color.FromArgb("#66745C");
 	}
@@ -304,6 +339,8 @@ public sealed class ChatMessage : INotifyPropertyChanged
 	public string Text { get; }
 
 	public bool IsUser { get; }
+
+	public bool IsAssistant => !IsUser;
 
 	public bool CanSaveAsNote { get; }
 
@@ -329,6 +366,8 @@ public sealed class ChatMessage : INotifyPropertyChanged
 
 	public Color BubbleColor { get; }
 
+	public Color BubbleStrokeColor { get; }
+
 	public Color TextColor { get; }
 
 	public Color SenderColor { get; }
@@ -337,7 +376,7 @@ public sealed class ChatMessage : INotifyPropertyChanged
 
 	public static ChatMessage FromUser(string text)
 	{
-		return new ChatMessage("Voce", text, true);
+		return new ChatMessage("Você", text, true);
 	}
 
 	public static ChatMessage FromAssistant(string text)

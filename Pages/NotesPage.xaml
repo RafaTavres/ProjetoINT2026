@@ -16,7 +16,7 @@
         <Color x:Key="Line">#E0E3DC</Color>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="*,86">
+    <Grid RowDefinitions="*,88">
         <Grid Grid.Row="0"
               RowDefinitions="64,70,84,*"
               Padding="22,28,22,0">
@@ -269,5 +269,9 @@
 
         <controls:BottomNavigationBar Grid.Row="1"
                                       ActiveTab="Notes" />
+
+        <controls:AppModalHost x:Name="ModalHost"
+                               Grid.RowSpan="2"
+                               ZIndex="200" />
     </Grid>
 </ContentPage>

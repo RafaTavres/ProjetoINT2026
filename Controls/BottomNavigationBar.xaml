@@ -2,7 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjetoINT2026.Controls.BottomNavigationBar"
-             HeightRequest="86"
+             HeightRequest="88"
              BackgroundColor="#FFFFFF">
 
     <Grid RowDefinitions="1,*"
@@ -11,69 +11,113 @@
                  BackgroundColor="#ECEEEA" />
 
         <Grid Grid.Row="1"
-              Padding="22,8,22,8"
+              Padding="20,7,20,8"
               ColumnDefinitions="*,*,*,*">
             <VerticalStackLayout Grid.Column="0"
-                                 Spacing="2"
+                                 Spacing="1"
                                  HorizontalOptions="Center">
                 <VerticalStackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnPatientsTapped" />
                 </VerticalStackLayout.GestureRecognizers>
-                <Image Source="icon_patients.svg"
-                       HeightRequest="28"
-                       WidthRequest="28" />
+                <Border x:Name="PatientsPill"
+                        HeightRequest="34"
+                        WidthRequest="50"
+                        StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="17" />
+                    </Border.StrokeShape>
+                    <Image x:Name="PatientsIcon"
+                           Source="icon_cases.svg"
+                           HeightRequest="25"
+                           WidthRequest="25"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
                 <Label x:Name="PatientsLabel"
-                       Text="Pacientes"
+                       Text="Casos"
                        TextColor="#747A70"
-                       FontSize="14"
+                       FontSize="13"
                        HorizontalOptions="Center" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Column="1"
-                                 Spacing="2"
+                                 Spacing="1"
                                  HorizontalOptions="Center">
                 <VerticalStackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnHomeTapped" />
                 </VerticalStackLayout.GestureRecognizers>
-                <Image Source="icon_home.svg"
-                       HeightRequest="30"
-                       WidthRequest="30" />
+                <Border x:Name="HomePill"
+                        HeightRequest="34"
+                        WidthRequest="50"
+                        StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="17" />
+                    </Border.StrokeShape>
+                    <Image x:Name="HomeIcon"
+                           Source="icon_feed.svg"
+                           HeightRequest="25"
+                           WidthRequest="25"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
                 <Label x:Name="HomeLabel"
-                       Text="Home"
+                       Text="Feed"
                        TextColor="#747A70"
-                       FontSize="14"
+                       FontSize="13"
                        HorizontalOptions="Center" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Column="2"
-                                 Spacing="2"
+                                 Spacing="1"
                                  HorizontalOptions="Center">
                 <VerticalStackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnChatTapped" />
                 </VerticalStackLayout.GestureRecognizers>
-                <Image Source="icon_chat.svg"
-                       HeightRequest="30"
-                       WidthRequest="30" />
+                <Border x:Name="ChatPill"
+                        HeightRequest="34"
+                        WidthRequest="50"
+                        StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="17" />
+                    </Border.StrokeShape>
+                    <Image x:Name="ChatIcon"
+                           Source="icon_chat.svg"
+                           HeightRequest="25"
+                           WidthRequest="25"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
                 <Label x:Name="ChatLabel"
                        Text="Florence"
                        TextColor="#747A70"
-                       FontSize="14"
+                       FontSize="13"
                        HorizontalOptions="Center" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Column="3"
-                                 Spacing="2"
+                                 Spacing="1"
                                  HorizontalOptions="Center">
                 <VerticalStackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnNotesTapped" />
                 </VerticalStackLayout.GestureRecognizers>
-                <Image Source="icon_notes.svg"
-                       HeightRequest="30"
-                       WidthRequest="30" />
+                <Border x:Name="NotesPill"
+                        HeightRequest="34"
+                        WidthRequest="50"
+                        StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="17" />
+                    </Border.StrokeShape>
+                    <Image x:Name="NotesIcon"
+                           Source="icon_notebook.svg"
+                           HeightRequest="25"
+                           WidthRequest="25"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
                 <Label x:Name="NotesLabel"
                        Text="Notas"
                        TextColor="#747A70"
-                       FontSize="14"
+                       FontSize="13"
                        HorizontalOptions="Center" />
             </VerticalStackLayout>
         </Grid>

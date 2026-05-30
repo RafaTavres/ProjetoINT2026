@@ -17,21 +17,41 @@
     </ContentPage.Resources>
 
     <Grid>
-        <Grid RowDefinitions="*,86">
+        <Grid RowDefinitions="*,88">
             <Grid Grid.Row="0"
-                  RowDefinitions="98,*,Auto"
+                  RowDefinitions="108,*,Auto"
                   Padding="24,34,24,0">
-            <VerticalStackLayout Spacing="2"
-                                 VerticalOptions="Center">
-                <Label Text="Florence"
-                       TextColor="{StaticResource SageDark}"
-                       FontSize="32"
-                       FontAttributes="Bold"
-                       FontFamily="OpenSansSemibold" />
-                <Label Text="Converse com a Florence"
-                       TextColor="{StaticResource SoftText}"
-                       FontSize="13" />
-            </VerticalStackLayout>
+            <Grid ColumnDefinitions="54,*"
+                  ColumnSpacing="12"
+                  VerticalOptions="Center">
+                <Border BackgroundColor="#EEF4EC"
+                        Stroke="#DDE7DA"
+                        StrokeThickness="1"
+                        HeightRequest="48"
+                        WidthRequest="48"
+                        VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="24" />
+                    </Border.StrokeShape>
+                    <Image Source="icon_chat.svg"
+                           HeightRequest="27"
+                           WidthRequest="27"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+                <VerticalStackLayout Grid.Column="1"
+                                     Spacing="2"
+                                     VerticalOptions="Center">
+                    <Label Text="Florence"
+                           TextColor="{StaticResource SageDark}"
+                           FontSize="32"
+                           FontAttributes="Bold"
+                           FontFamily="OpenSansSemibold" />
+                    <Label Text="Converse com a Florence"
+                           TextColor="{StaticResource SoftText}"
+                           FontSize="13" />
+                </VerticalStackLayout>
+            </Grid>
 
             <CollectionView x:Name="MessagesCollection"
                             Grid.Row="1"
@@ -43,22 +63,45 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="pages:ChatMessage">
-                        <Grid Padding="0,2">
-                            <Border BackgroundColor="{Binding BubbleColor}"
-                                    Stroke="{StaticResource Line}"
+                        <Grid Padding="0,3"
+                              ColumnDefinitions="34,*"
+                              ColumnSpacing="8">
+                            <Border IsVisible="{Binding IsAssistant}"
+                                    BackgroundColor="#EEF4EC"
+                                    Stroke="#DDE7DA"
                                     StrokeThickness="1"
-                                    Padding="16,12"
-                                    MinimumWidthRequest="164"
-                                    MaximumWidthRequest="330"
+                                    HeightRequest="30"
+                                    WidthRequest="30"
+                                    VerticalOptions="Start"
+                                    Margin="0,3,0,0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="15" />
+                                </Border.StrokeShape>
+                                <Label Text="F"
+                                       TextColor="{StaticResource SageDark}"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Border>
+
+                            <Border Grid.Column="1"
+                                    BackgroundColor="{Binding BubbleColor}"
+                                    Stroke="{Binding BubbleStrokeColor}"
+                                    StrokeThickness="1"
+                                    Padding="17,13"
+                                    MinimumWidthRequest="120"
+                                    MaximumWidthRequest="338"
                                     HorizontalOptions="{Binding BubbleHorizontalOptions}">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnMessageTapped" />
                                 </Border.GestureRecognizers>
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="14" />
+                                    <RoundRectangle CornerRadius="18" />
                                 </Border.StrokeShape>
-                                <VerticalStackLayout Spacing="4">
+                                <VerticalStackLayout Spacing="5">
                                     <Label Text="{Binding Sender}"
+                                           IsVisible="{Binding IsAssistant}"
                                            TextColor="{Binding SenderColor}"
                                            FontSize="12"
                                            FontAttributes="Bold" />
@@ -101,7 +144,7 @@
             </CollectionView>
 
             <Grid Grid.Row="2"
-                  RowDefinitions="Auto,54"
+                  RowDefinitions="Auto,Auto,54"
                   ColumnDefinitions="46,*,54"
                   ColumnSpacing="8"
                   RowSpacing="8"
@@ -138,7 +181,15 @@
                     </Grid>
                 </Border>
 
-                <Border Grid.Row="1"
+                <Label Grid.Row="1"
+                       Grid.ColumnSpan="3"
+                       Text="Florence está digitando..."
+                       TextColor="{StaticResource SoftText}"
+                       FontSize="12"
+                       IsVisible="{Binding IsResponding}"
+                       Margin="10,0,0,0" />
+
+                <Border Grid.Row="2"
                         BackgroundColor="#FFFFFF"
                         Stroke="{StaticResource Line}"
                         StrokeThickness="1"
@@ -150,16 +201,14 @@
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="23" />
                     </Border.StrokeShape>
-                    <Label Text="+"
-                           TextColor="{StaticResource SageDark}"
-                           FontSize="24"
-                           FontAttributes="Bold"
+                    <Image Source="icon_attach.svg"
+                           HeightRequest="21"
+                           WidthRequest="21"
                            HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           Margin="0,-2,0,0" />
+                           VerticalOptions="Center" />
                 </Border>
 
-                <Border Grid.Row="1"
+                <Border Grid.Row="2"
                         Grid.Column="1"
                         BackgroundColor="#FFFFFF"
                         Stroke="{StaticResource Line}"
@@ -179,19 +228,25 @@
                            VerticalOptions="Center" />
                 </Border>
 
-                <Button Grid.Row="1"
+                <Border Grid.Row="2"
                         Grid.Column="2"
-                        Text="➤"
-                        Clicked="OnSendClicked"
                         BackgroundColor="{StaticResource Sage}"
-                        TextColor="White"
-                        FontSize="20"
-                        FontAttributes="Bold"
-                        CornerRadius="24"
-                        Padding="0"
+                        StrokeThickness="0"
                         HeightRequest="48"
-                        WidthRequest="54"
-                        VerticalOptions="Center" />
+                        WidthRequest="50"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSendTapped" />
+                    </Border.GestureRecognizers>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="24" />
+                    </Border.StrokeShape>
+                    <Image Source="icon_send.svg"
+                           HeightRequest="21"
+                           WidthRequest="21"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
             </Grid>
         </Grid>
 
@@ -218,7 +273,7 @@
                                FontSize="21"
                                FontAttributes="Bold"
                                FontFamily="OpenSansSemibold" />
-                        <Label Text="Escolha onde essa nota sera guardada"
+                        <Label Text="Escolha onde essa nota será guardada"
                                TextColor="{StaticResource SoftText}"
                                FontSize="12" />
                     </VerticalStackLayout>
@@ -300,5 +355,8 @@
                 </VerticalStackLayout>
             </Border>
         </Grid>
+
+        <controls:AppModalHost x:Name="ModalHost"
+                               ZIndex="200" />
     </Grid>
 </ContentPage>
